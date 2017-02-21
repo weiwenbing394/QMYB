@@ -76,7 +76,7 @@
     }];
     
     [mgr startMonitoring];
-
+    
 };
 
 /**
@@ -103,7 +103,7 @@
         return StatusUnknown;
         
     }
-
+    
 };
 
 /**
@@ -274,7 +274,7 @@
             //对数据进行异步缓存
             responseCache ? [XWNetworkCache setHttpCache:responseObject URL:url parameters:params] : nil;
             
-            if (showHUD==YES) {
+            if (showHUD==YES&&[self isHaveNetwork]==YES) {
                 
                 [MBProgressHUD hiddenHUD];
             }
@@ -285,7 +285,7 @@
             
             fail ? fail(error) : nil;
             
-            if (showHUD==YES) {
+            if (showHUD==YES&&[self isHaveNetwork]==YES) {
                 
                 [MBProgressHUD hiddenHUD];
                 
@@ -306,7 +306,7 @@
             //对数据进行异步缓存
             responseCache ? [XWNetworkCache setHttpCache:responseObject URL:url parameters:params] : nil;
             
-            if (showHUD==YES) {
+            if (showHUD==YES&&[self isHaveNetwork]==YES) {
                 
                 [MBProgressHUD hiddenHUD];
                 
@@ -318,7 +318,7 @@
             
             fail ? fail(error) : nil;
             
-            if (showHUD==YES) {
+            if (showHUD==YES&&[self isHaveNetwork]==YES) {
                 
                 [MBProgressHUD hiddenHUD];
                 
@@ -405,7 +405,7 @@
         
         success ? success(responseObject) : nil;
         
-        if (showHUD==YES) {
+        if (showHUD==YES&&[self isHaveNetwork]==YES) {
             
             [MBProgressHUD hiddenHUD];
         }
@@ -416,7 +416,7 @@
         
         fail ? fail(error) : nil;
         
-        if (showHUD==YES) {
+        if (showHUD==YES&&[self isHaveNetwork]==YES) {
             
             [MBProgressHUD hiddenHUD];
         }
@@ -488,7 +488,7 @@
         
         [[self tasks] removeObject:sessionTask];
         
-        if (showHUD==YES) {
+        if (showHUD==YES&&[self isHaveNetwork]==YES) {
             
             [MBProgressHUD hiddenHUD];
         }
@@ -506,7 +506,7 @@
     
     //开始下载
     [sessionTask resume];
-
+    
     // 添加sessionTask到数组
     sessionTask ? [[self tasks] addObject:sessionTask] : nil ;
     
@@ -565,7 +565,7 @@
     
     //[manager.requestSerializer setValue:@"测试头文字" forHTTPHeaderField:@"服务器取值字段"];
     
-
+    
     return manager;
     
 }
