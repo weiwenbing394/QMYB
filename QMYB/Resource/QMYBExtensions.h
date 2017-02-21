@@ -11,6 +11,7 @@
 
 #import "XWNetworking.h"
 #import "MBProgressHUD+ADD.h"
+#import "UIImageView+WebCache.h"
 #import <UMSocialCore/UMSocialCore.h>
 #import "UMMobClick/MobClick.h"
 #import <UShareUI/UShareUI.h>
@@ -20,6 +21,7 @@
 #import "NirKxMenu.h"
 #import "IQKeyboardManager.h"
 #import "IQKeyboardReturnKeyHandler.h"
+#import "XWNetworkCache.h"
 
 
 //Category

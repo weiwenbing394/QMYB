@@ -10,9 +10,8 @@
 #import "AFNetworking.h"
 #import "AFNetworkActivityIndicatorManager.h"
 #import "MBProgressHUD+ADD.h"
-#define RootUrl   [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"MyImages"]
+#import "XWNetworkCache.h"
 
-static NSMutableArray *tasks;
 
 @implementation XWNetworking
 
@@ -32,13 +31,13 @@ static NSMutableArray *tasks;
  *  任务数组
  */
 + (NSMutableArray *)tasks{
+    static NSMutableArray *tasks;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         tasks=[[NSMutableArray alloc]init];
     });
     return tasks;
 }
-
 
 /**
  *  开启网络监测
@@ -125,10 +124,42 @@ static NSMutableArray *tasks;
 };
 
 /**
+ 取消所有HTTP请求
+ */
++ (void)cancelAllRequest{
+    // 锁操作
+    @synchronized(self){
+        [[self tasks] enumerateObjectsUsingBlock:^(NSURLSessionTask  *_Nonnull task, NSUInteger idx, BOOL * _Nonnull stop) {
+            [task cancel];
+        }];
+        [[self tasks] removeAllObjects];
+    }
+};
+
+/**
+ 取消指定URL的HTTP请求
+ */
++ (void)cancelRequestWithURL:(NSString *)URL{
+    if (!URL){
+        return;
+    }
+    @synchronized (self){
+        [[self tasks] enumerateObjectsUsingBlock:^(NSURLSessionTask  *_Nonnull task, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([task.currentRequest.URL.absoluteString hasPrefix:URL]) {
+                [task cancel];
+                [[self tasks] removeObject:task];
+                *stop = YES;
+            }
+        }];
+    }
+};
+
+#pragma mark 无缓存请求
+/**
  *  Get请求
  */
 + (XWURLSessionTask *)getWithUrl:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD{
-    return [self baseRequestType:GET resPonseType:JSON url:url params:params success:success fail:fail showHUD:showHUD];
+    return [self baseRequestType:GET resPonseType:JSON url:url params:params responseCache:nil success:success fail:fail showHUD:showHUD];
 };
 
 
@@ -136,14 +167,14 @@ static NSMutableArray *tasks;
  *  POST请求
  */
 + (XWURLSessionTask *)postWithUrl:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD{
-    return [self baseRequestType:POST resPonseType:JSON url:url params:params success:success fail:fail showHUD:showHUD];
+    return [self baseRequestType:POST resPonseType:JSON url:url params:params responseCache:nil success:success fail:fail showHUD:showHUD];
 };
 
 /**
  *  Get请求,返回data
  */
 + (XWURLSessionTask *)getWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD{
-    return [self baseRequestType:GET resPonseType:DATA url:url params:params success:success fail:fail showHUD:showHUD];
+    return [self baseRequestType:GET resPonseType:DATA url:url params:params responseCache:nil success:success fail:fail showHUD:showHUD];
 };
 
 
@@ -151,9 +182,42 @@ static NSMutableArray *tasks;
  *  POST请求,返回data
  */
 + (XWURLSessionTask *)postWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD{
-    return [self baseRequestType:POST resPonseType:DATA url:url params:params success:success fail:fail showHUD:showHUD];
+    return [self baseRequestType:POST resPonseType:DATA url:url params:params responseCache:nil success:success  fail:fail showHUD:showHUD];
 };
 
+#pragma mark 有缓存请求
+/**
+ *  Get请求,返回json,有缓存
+ */
++ (XWURLSessionTask *)getWithUrl:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD{
+    return [self baseRequestType:GET resPonseType:JSON url:url params:params responseCache:responseCache success:success fail:fail showHUD:showHUD];
+};
+
+
+/**
+ *  POST请求,返回json,有缓存
+ */
++ (XWURLSessionTask *)postWithUrl:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD{
+    return [self baseRequestType:POST resPonseType:JSON url:url params:params responseCache:responseCache success:success fail:fail showHUD:showHUD];
+};
+
+/**
+ *  Get请求,返回data,有缓存
+ */
++ (XWURLSessionTask *)getWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD{
+    return [self baseRequestType:GET resPonseType:DATA url:url params:params responseCache:responseCache success:success fail:fail showHUD:showHUD];
+};
+
+
+/**
+ *  POST请求,返回data,有缓存
+ */
++ (XWURLSessionTask *)postWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD{
+    return [self baseRequestType:POST resPonseType:DATA url:url params:params responseCache:responseCache success:success  fail:fail showHUD:showHUD];
+};
+
+
+#pragma mark base请求
 /**
  *  post 或者 get 请求方法,block回调
  *  @param type             网络请求类型
@@ -163,25 +227,23 @@ static NSMutableArray *tasks;
  *  @param fail             请求失败
  *  @param showHUD          是否显示HUD
  */
-+ (XWURLSessionTask *)baseRequestType:(httpMethod)type resPonseType:(responseType)responseType url:(NSString *)url params:(NSDictionary *)params  success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHUD:(BOOL)showHUD {
++ (XWURLSessionTask *)baseRequestType:(httpMethod)type resPonseType:(responseType)responseType url:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHUD:(BOOL)showHUD {
     
     //没有网络
     if ([self isHaveNetwork]==NO) {
         
-        [MBProgressHUD ToastInformation:@"网络似乎不佳..."];
+        [MBProgressHUD ToastInformation:@"网络似乎已断开..."];
         
-        return nil;
+    }else{
+        
+        if (showHUD == YES) {
+            
+            [MBProgressHUD showHUDWithTitle:@"加载中..."];
+        }
     }
     
-    if (url==nil) {
-        
-        return nil;
-    }
-    
-    if (showHUD == YES) {
-                
-        [MBProgressHUD showHUDWithTitle:@"加载中..."];
-    }
+    // 读取缓存
+    responseCache ? [XWNetworkCache httpCacheForURL:url parameters:params withBlock:responseCache] : nil;
     
     //检查地址中是否有中文
     NSString *urlStr=[NSURL URLWithString:url]?url:[self strUTF8Encoding:url];
@@ -205,12 +267,12 @@ static NSMutableArray *tasks;
             
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             
-            if (success) {
-                
-                success(responseObject);
-            }
-            
             [[self tasks] removeObject:sessionTask];
+            
+            success ? success(responseObject) : nil;
+            
+            //对数据进行异步缓存
+            responseCache ? [XWNetworkCache setHttpCache:responseObject URL:url parameters:params] : nil;
             
             if (showHUD==YES) {
                 
@@ -219,12 +281,9 @@ static NSMutableArray *tasks;
             
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             
-            if (fail) {
-                
-                fail(error);
-            }
-            
             [[self tasks] removeObject:sessionTask];
+            
+            fail ? fail(error) : nil;
             
             if (showHUD==YES) {
                 
@@ -240,13 +299,12 @@ static NSMutableArray *tasks;
             
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             
-            if (success) {
-                
-                success(responseObject);
-                
-            }
-            
             [[self tasks] removeObject:sessionTask];
+            
+            success ? success(responseObject) : nil;
+            
+            //对数据进行异步缓存
+            responseCache ? [XWNetworkCache setHttpCache:responseObject URL:url parameters:params] : nil;
             
             if (showHUD==YES) {
                 
@@ -256,12 +314,9 @@ static NSMutableArray *tasks;
             
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             
-            if (fail) {
-                
-                fail(error);
-            }
-            
             [[self tasks] removeObject:sessionTask];
+            
+            fail ? fail(error) : nil;
             
             if (showHUD==YES) {
                 
@@ -273,12 +328,9 @@ static NSMutableArray *tasks;
         
     }
     
-    if (sessionTask) {
-        [[self tasks] addObject:sessionTask];
-    }
+    sessionTask?[[self tasks] addObject:sessionTask]:nil;
     
     return sessionTask;
-    
 }
 
 
@@ -300,20 +352,14 @@ static NSMutableArray *tasks;
     //没有网络
     if ([self isHaveNetwork]==NO) {
         
-        [MBProgressHUD ToastInformation:@"网络似乎不佳..."];
+        [MBProgressHUD ToastInformation:@"网络似乎已断开..."];
         
-        return nil;
-    }
-
-    if (url==nil) {
+    }else{
         
-        return nil;
-        
-    }
-    
-    if (showHUD==YES) {
-        
-        [MBProgressHUD showHUDWithTitle:@"正在上传..."];
+        if (showHUD == YES) {
+            
+            [MBProgressHUD showHUDWithTitle:@"正在上传..."];
+        }
     }
     
     //检查地址中是否有中文
@@ -346,18 +392,18 @@ static NSMutableArray *tasks;
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
-        if (progress) {
+        //上传进度
+        dispatch_sync(dispatch_get_main_queue(), ^{
             
-            progress(uploadProgress.completedUnitCount, uploadProgress.totalUnitCount);
+            progress ? progress(uploadProgress.completedUnitCount, uploadProgress.totalUnitCount) : nil;
             
-        }
+        });
+        
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        if (success) {
-            success(responseObject);
-        }
-        
         [[self tasks] removeObject:sessionTask];
+        
+        success ? success(responseObject) : nil;
         
         if (showHUD==YES) {
             
@@ -366,12 +412,9 @@ static NSMutableArray *tasks;
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        if (fail) {
-            
-            fail(error);
-        }
-        
         [[self tasks] removeObject:sessionTask];
+        
+        fail ? fail(error) : nil;
         
         if (showHUD==YES) {
             
@@ -380,11 +423,7 @@ static NSMutableArray *tasks;
         
     }];
     
-    if (sessionTask) {
-        
-        [[self tasks] addObject:sessionTask];
-        
-    }
+    sessionTask?[[self tasks] addObject:sessionTask]:nil;
     
     return sessionTask;
     
@@ -402,14 +441,17 @@ static NSMutableArray *tasks;
  */
 + (XWURLSessionTask *)downloadWithUrl:(NSString *)url saveToPath:(NSString *)saveToPath  progress:(XWDownloadProgress )progressBlock  success:(XWResponseSuccess )success failure:(XWResponseFail )fail showHUD:(BOOL)showHUD{
     
-    if (url==nil) {
-        return nil;
-    }
-    
-    if (showHUD==YES) {
+    //没有网络
+    if ([self isHaveNetwork]==NO) {
         
-        [MBProgressHUD showHUDWithTitle:@"正在下载..."];
+        [MBProgressHUD ToastInformation:@"网络似乎已断开..."];
         
+    }else{
+        
+        if (showHUD == YES) {
+            
+            [MBProgressHUD showHUDWithTitle:@"正在下载..."];
+        }
     }
     
     NSURLRequest *downloadRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
@@ -425,77 +467,48 @@ static NSMutableArray *tasks;
         //回到主线程刷新UI
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            if (progressBlock) {
-                
-                progressBlock(downloadProgress.completedUnitCount, downloadProgress.totalUnitCount);
-            }
+            progressBlock ? progressBlock(downloadProgress.completedUnitCount, downloadProgress.totalUnitCount) : nil;
+            
         });
         
     } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+        //拼接缓存目录
+        NSString *downloadDir = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:saveToPath ? saveToPath : @"Download"];
         
-        if (!saveToPath) {
-//      NSURL *downloadURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory   inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
-//            NSLog(@"默认路径--%@",downloadURL);
-//            return [downloadURL URLByAppendingPathComponent:[response suggestedFilename]];
-            NSString *filePath=[response suggestedFilename];
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            BOOL isDir = FALSE;
-            BOOL isDirExist = [fileManager fileExistsAtPath:RootUrl isDirectory:&isDir];
-            if(!(isDirExist && isDir)){
-                BOOL bCreateDir = [fileManager createDirectoryAtPath:RootUrl  withIntermediateDirectories:YES attributes:nil error:nil];
-                if(!bCreateDir){
-                    return nil;
-                }
-                NSString *fileUrl=[RootUrl stringByAppendingPathComponent:filePath];
-                NSURL *url=[NSURL fileURLWithPath:fileUrl];
-                return url;
-            }else{
-                NSString *fileUrl=[RootUrl stringByAppendingPathComponent:filePath];
-                NSURL *url=[NSURL fileURLWithPath:fileUrl];
-                return url;
-            }
-            
-        }else{
-            
-            return [NSURL fileURLWithPath:saveToPath];
-        }
+        //打开文件管理器
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        //创建Download目录
+        [fileManager createDirectoryAtPath:downloadDir withIntermediateDirectories:YES attributes:nil error:nil];
+        //拼接文件路径
+        NSString *filePath = [downloadDir stringByAppendingPathComponent:response.suggestedFilename];
+        //返回文件位置的URL路径
+        return [NSURL fileURLWithPath:filePath];
         
     } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
         
         [[self tasks] removeObject:sessionTask];
-        
-        if (error == nil) {
-            
-            if (success) {
-                
-                success([filePath path]);//返回完整路径
-                
-            }
-            
-        } else {
-            
-            if (fail) {
-                
-                fail(error);
-                
-            }
-        }
         
         if (showHUD==YES) {
             
             [MBProgressHUD hiddenHUD];
         }
         
+        if(fail && error) {
+            
+            fail(error);
+            
+            return ;
+        };
+        
+        success ? success(filePath.absoluteString /** NSURL->NSString*/) : nil;
+        
     }];
     
     //开始下载
     [sessionTask resume];
 
-    if (sessionTask) {
-        
-        [[self tasks] addObject:sessionTask];
-        
-    }
+    // 添加sessionTask到数组
+    sessionTask ? [[self tasks] addObject:sessionTask] : nil ;
     
     return sessionTask;
     
@@ -507,7 +520,9 @@ static NSMutableArray *tasks;
  */
 + (AFHTTPSessionManager *)getAFJsonManager{
     
-    
+    // 开始监测网络状态
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+    // 打开状态栏的等待菊花
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     
     AFHTTPSessionManager *manager  = [AFHTTPSessionManager manager];
@@ -533,6 +548,9 @@ static NSMutableArray *tasks;
  */
 + (AFHTTPSessionManager *)getAFHttpManager{
     
+    // 开始监测网络状态
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+    // 打开状态栏的等待菊花
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     
     AFHTTPSessionManager *manager  = [AFHTTPSessionManager manager];
@@ -563,8 +581,7 @@ static NSMutableArray *tasks;
 }
 
 
-- (void)dealloc
-{
+- (void)dealloc{
     [[AFNetworkReachabilityManager sharedManager] stopMonitoring];
 }
 

@@ -55,6 +55,16 @@
 		514EBF631E54517700EEEBAC /* MBProgressHUD+ADD.m in Sources */ = {isa = PBXBuildFile; fileRef = 514EBF5E1E54517700EEEBAC /* MBProgressHUD+ADD.m */; };
 		514EBF641E54517700EEEBAC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 514EBF601E54517700EEEBAC /* Reachability.m */; };
 		514EBF651E54517700EEEBAC /* XWNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 514EBF621E54517700EEEBAC /* XWNetworking.m */; };
+		5176E5371E5A8852009D8033 /* QMYBShouYeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5361E5A8852009D8033 /* QMYBShouYeTableViewCell.m */; };
+		5176E53A1E5A8FEF009D8033 /* QMYBShouYeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5391E5A8FEF009D8033 /* QMYBShouYeModel.m */; };
+		5176E53D1E5AA8F5009D8033 /* QMYBShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E53C1E5AA8F5009D8033 /* QMYBShareModel.m */; };
+		5176E5461E5AC2F2009D8033 /* QMYBWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5441E5AC2F2009D8033 /* QMYBWebViewController.m */; };
+		5176E5471E5AC2F2009D8033 /* QMYBWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5176E5451E5AC2F2009D8033 /* QMYBWebViewController.xib */; };
+		5176E54A1E5C0F6A009D8033 /* XWNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5491E5C0F6A009D8033 /* XWNetworkCache.m */; };
+		5176E5541E5C0FE3009D8033 /* YYCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E54D1E5C0FE3009D8033 /* YYCache.m */; };
+		5176E5551E5C0FE3009D8033 /* YYDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E54F1E5C0FE3009D8033 /* YYDiskCache.m */; };
+		5176E5561E5C0FE3009D8033 /* YYKVStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5511E5C0FE3009D8033 /* YYKVStorage.m */; };
+		5176E5571E5C0FE3009D8033 /* YYMemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5531E5C0FE3009D8033 /* YYMemoryCache.m */; };
 		820A9A0D3BFE88FF156EFC50 /* libPods-QMYB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20578F570452733722B4B842 /* libPods-QMYB.a */; };
 /* End PBXBuildFile section */
 
@@ -171,6 +181,25 @@
 		514EBF611E54517700EEEBAC /* XWNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWNetworking.h; sourceTree = "<group>"; };
 		514EBF621E54517700EEEBAC /* XWNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWNetworking.m; sourceTree = "<group>"; };
 		514EBF6B1E54585C00EEEBAC /* QMYBExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBExtensions.h; sourceTree = "<group>"; };
+		5176E5351E5A8852009D8033 /* QMYBShouYeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBShouYeTableViewCell.h; sourceTree = "<group>"; };
+		5176E5361E5A8852009D8033 /* QMYBShouYeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBShouYeTableViewCell.m; sourceTree = "<group>"; };
+		5176E5381E5A8FEF009D8033 /* QMYBShouYeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBShouYeModel.h; sourceTree = "<group>"; };
+		5176E5391E5A8FEF009D8033 /* QMYBShouYeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBShouYeModel.m; sourceTree = "<group>"; };
+		5176E53B1E5AA8F5009D8033 /* QMYBShareModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBShareModel.h; sourceTree = "<group>"; };
+		5176E53C1E5AA8F5009D8033 /* QMYBShareModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBShareModel.m; sourceTree = "<group>"; };
+		5176E5431E5AC2F2009D8033 /* QMYBWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBWebViewController.h; sourceTree = "<group>"; };
+		5176E5441E5AC2F2009D8033 /* QMYBWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBWebViewController.m; sourceTree = "<group>"; };
+		5176E5451E5AC2F2009D8033 /* QMYBWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QMYBWebViewController.xib; sourceTree = "<group>"; };
+		5176E5481E5C0F6A009D8033 /* XWNetworkCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWNetworkCache.h; sourceTree = "<group>"; };
+		5176E5491E5C0F6A009D8033 /* XWNetworkCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWNetworkCache.m; sourceTree = "<group>"; };
+		5176E54C1E5C0FE3009D8033 /* YYCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYCache.h; sourceTree = "<group>"; };
+		5176E54D1E5C0FE3009D8033 /* YYCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYCache.m; sourceTree = "<group>"; };
+		5176E54E1E5C0FE3009D8033 /* YYDiskCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYDiskCache.h; sourceTree = "<group>"; };
+		5176E54F1E5C0FE3009D8033 /* YYDiskCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYDiskCache.m; sourceTree = "<group>"; };
+		5176E5501E5C0FE3009D8033 /* YYKVStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYKVStorage.h; sourceTree = "<group>"; };
+		5176E5511E5C0FE3009D8033 /* YYKVStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYKVStorage.m; sourceTree = "<group>"; };
+		5176E5521E5C0FE3009D8033 /* YYMemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYMemoryCache.h; sourceTree = "<group>"; };
+		5176E5531E5C0FE3009D8033 /* YYMemoryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYMemoryCache.m; sourceTree = "<group>"; };
 		8E2CB302F1B2679F65F683F5 /* Pods-QMYB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QMYB.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QMYB/Pods-QMYB.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -463,6 +492,9 @@
 				514EBF311E54427E00EEEBAC /* QMYBTabBarController.m */,
 				514EBF461E5444C600EEEBAC /* QMYBBaseViewController.h */,
 				514EBF471E5444C600EEEBAC /* QMYBBaseViewController.m */,
+				5176E5431E5AC2F2009D8033 /* QMYBWebViewController.h */,
+				5176E5441E5AC2F2009D8033 /* QMYBWebViewController.m */,
+				5176E5451E5AC2F2009D8033 /* QMYBWebViewController.xib */,
 			);
 			path = BaseViewController;
 			sourceTree = "<group>";
@@ -519,6 +551,10 @@
 		514EBF381E5443F900EEEBAC /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5176E5381E5A8FEF009D8033 /* QMYBShouYeModel.h */,
+				5176E5391E5A8FEF009D8033 /* QMYBShouYeModel.m */,
+				5176E53B1E5AA8F5009D8033 /* QMYBShareModel.h */,
+				5176E53C1E5AA8F5009D8033 /* QMYBShareModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -526,6 +562,8 @@
 		514EBF391E5443F900EEEBAC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				5176E5351E5A8852009D8033 /* QMYBShouYeTableViewCell.h */,
+				5176E5361E5A8852009D8033 /* QMYBShouYeTableViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -625,12 +663,15 @@
 		514EBF5C1E54516200EEEBAC /* 网络与加载动画 */ = {
 			isa = PBXGroup;
 			children = (
+				5176E54B1E5C0FE3009D8033 /* YYCache */,
 				514EBF5D1E54517700EEEBAC /* MBProgressHUD+ADD.h */,
 				514EBF5E1E54517700EEEBAC /* MBProgressHUD+ADD.m */,
 				514EBF5F1E54517700EEEBAC /* Reachability.h */,
 				514EBF601E54517700EEEBAC /* Reachability.m */,
 				514EBF611E54517700EEEBAC /* XWNetworking.h */,
 				514EBF621E54517700EEEBAC /* XWNetworking.m */,
+				5176E5481E5C0F6A009D8033 /* XWNetworkCache.h */,
+				5176E5491E5C0F6A009D8033 /* XWNetworkCache.m */,
 			);
 			path = "网络与加载动画";
 			sourceTree = "<group>";
@@ -661,6 +702,21 @@
 				512F7A261E5561280097F142 /* UIColor */,
 			);
 			path = Category;
+			sourceTree = "<group>";
+		};
+		5176E54B1E5C0FE3009D8033 /* YYCache */ = {
+			isa = PBXGroup;
+			children = (
+				5176E54C1E5C0FE3009D8033 /* YYCache.h */,
+				5176E54D1E5C0FE3009D8033 /* YYCache.m */,
+				5176E54E1E5C0FE3009D8033 /* YYDiskCache.h */,
+				5176E54F1E5C0FE3009D8033 /* YYDiskCache.m */,
+				5176E5501E5C0FE3009D8033 /* YYKVStorage.h */,
+				5176E5511E5C0FE3009D8033 /* YYKVStorage.m */,
+				5176E5521E5C0FE3009D8033 /* YYMemoryCache.h */,
+				5176E5531E5C0FE3009D8033 /* YYMemoryCache.m */,
+			);
+			path = YYCache;
 			sourceTree = "<group>";
 		};
 		F6AD57AE8E255456380361D1 /* Frameworks */ = {
@@ -793,6 +849,7 @@
 				512F7ACC1E5582EC0097F142 /* read_me.txt in Resources */,
 				512F7ACD1E5582EC0097F142 /* README.txt in Resources */,
 				512F7AD01E5582EC0097F142 /* UMSocialSDKResources.bundle in Resources */,
+				5176E5471E5AC2F2009D8033 /* QMYBWebViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -875,24 +932,33 @@
 				512F7A4F1E55652B0097F142 /* UIView+Extension.m in Sources */,
 				512F7A291E5561280097F142 /* UIColor+color.m in Sources */,
 				514EBF541E54452000EEEBAC /* QMYBMeViewController.m in Sources */,
+				5176E5461E5AC2F2009D8033 /* QMYBWebViewController.m in Sources */,
 				512F7A481E5563F40097F142 /* UIImage+Extension.m in Sources */,
 				514EBF571E54459400EEEBAC /* QMYBNavigationController.m in Sources */,
 				512F7ADF1E5690C40097F142 /* QMYBShouyiViewController.m in Sources */,
+				5176E5371E5A8852009D8033 /* QMYBShouYeTableViewCell.m in Sources */,
 				514EBF631E54517700EEEBAC /* MBProgressHUD+ADD.m in Sources */,
 				514EBEFC1E543DAA00EEEBAC /* AppDelegate.m in Sources */,
+				5176E5541E5C0FE3009D8033 /* YYCache.m in Sources */,
 				512F7A2F1E55616D0097F142 /* UIView+FontSize.m in Sources */,
 				514EBEF91E543DAA00EEEBAC /* main.m in Sources */,
 				512F7AEE1E5699FB0097F142 /* QMYBTestViewController.m in Sources */,
+				5176E5551E5C0FE3009D8033 /* YYDiskCache.m in Sources */,
 				512F7A3A1E55627A0097F142 /* UITextField+TYExtensions.m in Sources */,
+				5176E53D1E5AA8F5009D8033 /* QMYBShareModel.m in Sources */,
+				5176E5561E5C0FE3009D8033 /* YYKVStorage.m in Sources */,
 				512F7AF21E56E7B80097F142 /* NirKxMenu.m in Sources */,
 				512F7A321E5562260097F142 /* NSArray+SafeAccess.m in Sources */,
 				512F7A441E5563A60097F142 /* UIButton+Extension.m in Sources */,
 				512F7AE51E5694890097F142 /* QMYBAllOrderViewController.m in Sources */,
 				514EBF4E1E5444FF00EEEBAC /* QMYBOrderWriteViewController.m in Sources */,
 				512F7AE81E5694B20097F142 /* QMYBCompletedViewController.m in Sources */,
+				5176E54A1E5C0F6A009D8033 /* XWNetworkCache.m in Sources */,
 				512F7AE21E5690E90097F142 /* QMYBJiaoyiViewController.m in Sources */,
+				5176E5571E5C0FE3009D8033 /* YYMemoryCache.m in Sources */,
 				514EBF4B1E5444E300EEEBAC /* QMYBMainViewController.m in Sources */,
 				514EBF641E54517700EEEBAC /* Reachability.m in Sources */,
+				5176E53A1E5A8FEF009D8033 /* QMYBShouYeModel.m in Sources */,
 				512F7A4C1E5564FC0097F142 /* UILabel+Extension.m in Sources */,
 				514EBF321E54427E00EEEBAC /* QMYBTabBarController.m in Sources */,
 				512F7ADC1E568E830097F142 /* OrderCollectionViewCell.m in Sources */,

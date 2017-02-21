@@ -19,7 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor=[UIColor whiteColor];
+    self.view.backgroundColor=RGB(231, 231, 231);
     [self initNavBar];
 }
 

@@ -24,7 +24,9 @@ typedef enum{
  *  请求方式 GET OR POST
  */
 typedef enum HttpMethod {
+    /** 设置请求方式 GET*/
     GET,
+    /** 设置请求方式 POST*/
     POST
 } httpMethod;
 
@@ -32,17 +34,21 @@ typedef enum HttpMethod {
  *  服务器返回数据 JSON OR DATA
  */
 typedef enum ResponseType {
+    /** 设置响应数据为JSON格式*/
     JSON,
+    /** 设置响应数据为二进制格式*/
     DATA
 } responseType;
 
-
+/** 请求成功的Block */
 typedef void( ^ XWResponseSuccess)(id response);
-
+/** 请求失败的Block */
 typedef void( ^ XWResponseFail)(NSError *error);
-
+/** 缓存的Block */
+typedef void(^XWHttpRequestCache)(id responseCache);
+/** 上传的进度*/
 typedef void( ^ XWUploadProgress)(int64_t bytesProgress,int64_t totalBytesProgress);
-
+/** 下载的进度*/
 typedef void( ^ XWDownloadProgress)(int64_t bytesProgress,int64_t totalBytesProgress);
 
 typedef NSURLSessionTask XWURLSessionTask;
@@ -71,28 +77,62 @@ typedef NSURLSessionTask XWURLSessionTask;
  */
 + (BOOL) isHaveNetwork;
 
+/**
+ 取消所有HTTP请求
+ */
++ (void)cancelAllRequest;
 
 /**
- *  Get请求,返回json
+ 取消指定URL的HTTP请求
+ */
++ (void)cancelRequestWithURL:(NSString *)URL;
+
+#pragma mark 无缓存请求
+/**
+ *  Get请求,返回json,无缓存
  */
 + (XWURLSessionTask *)getWithUrl:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 
 /**
- *  POST请求,返回json
+ *  POST请求,返回json,无缓存
  */
 + (XWURLSessionTask *)postWithUrl:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 /**
- *  Get请求,返回data
+ *  Get请求,返回data,无缓存
  */
 + (XWURLSessionTask *)getWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 
 /**
- *  POST请求,返回data
+ *  POST请求,返回data,无缓存
  */
 + (XWURLSessionTask *)postWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
+
+
+#pragma mark 有缓存请求
+/**
+ *  Get请求,返回json,有缓存
+ */
++ (XWURLSessionTask *)getWithUrl:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
+
+
+/**
+ *  POST请求,返回json,有缓存
+ */
++ (XWURLSessionTask *)postWithUrl:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
+
+/**
+ *  Get请求,返回data,有缓存
+ */
++ (XWURLSessionTask *)getWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
+
+
+/**
+ *  POST请求,返回data,有缓存
+ */
++ (XWURLSessionTask *)postWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 
 
