@@ -8,9 +8,12 @@
 
 #import "AppDelegate.h"
 #import "QMYBTabBarController.h"
-
+#import "NotDismissAlertView.h"
+#import "QMYBLoginViewController.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic,strong)JCAlertView *updateAlert;
 
 @end
 
@@ -21,7 +24,8 @@
     self.window=[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     
     //设置rootVC
-    QMYBTabBarController *rootVC=[[QMYBTabBarController alloc]init];
+    //QMYBTabBarController *rootVC=[[QMYBTabBarController alloc]init];
+    QMYBLoginViewController *rootVC=[[QMYBLoginViewController alloc]init];
     self.window.rootViewController=rootVC;
     
     //键盘
@@ -29,7 +33,8 @@
     manager.shouldResignOnTouchOutside = YES;
     manager.toolbarDoneBarButtonItemText=@"完成";
     manager.shouldToolbarUsesTextFieldTintColor = NO;
-    manager.enableAutoToolbar=NO;
+    manager.enableAutoToolbar=YES;
+    manager.shouldShowTextFieldPlaceholder=NO;
     manager.toolbarTintColor=[UIColor darkGrayColor];
     manager.toolbarManageBehaviour =IQAutoToolbarByTag;
     
@@ -38,6 +43,9 @@
     
     //友盟统计
     [self umengTrack];
+    
+    //检查更新
+    [self update];
     
     self.window.backgroundColor=[UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -75,6 +83,70 @@
     }
     return result;
 }
+
+/**
+ *检查更新
+ *
+ */
+- (void)update{
+    NSString * currentVersion=[[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
+    NSString *urlStr=[NSString stringWithFormat:@"%@%@",@"",@"/v1/version"];
+    NSDictionary *dic=@{@"id":@"1",@"version":currentVersion};
+    [XWNetworking postWithUrl:urlStr params:dic success:^(id response) {
+        NSDictionary *dic =response;
+        if ([dic integerForKey:@"code"]==3) {
+            NSDictionary *dataDic=[dic dictionaryForKey:@"data"];
+            //最新版本号
+            NSString     *version=@"";
+            if ([dataDic hasKey:@"version"]) {
+                version =[NSString stringWithFormat:@"v%@",[dataDic stringForKey:@"version"]];}
+            //更新内容
+            NSString     *content=[[dataDic stringForKey:@"content"] stringByReplacingOccurrencesOfString:@"*" withString:@"\n"];
+            //是否强制更新
+            NSInteger    notDisMiss=0;
+            if ([dataDic hasKey:@"compelUpdate"]) {
+                notDisMiss = [dataDic integerForKey:@"compelUpdate"];
+            }
+            //提示框
+            [self showAlertWithTitle:[NSString stringWithFormat:@"发现新版本%@", version] Message:content notDissMiss:notDisMiss];
+                }
+    } fail:^(NSError *error) {
+        
+    } showHud:NO];
+}
+
+//下载更新
+- (void)toConnectAppStore{
+    NSString *updateUrl = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=%d",1140892295];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:updateUrl]];
+}
+
+//强制退出
+- (void)exitApplication {
+    exit(0);
+}
+
+//左对齐版本升级提示
+- (void) showAlertWithTitle:(NSString *)title  Message:(NSString *) message  notDissMiss:(NSInteger)diss{
+    NotDismissAlertView *alert=[[NotDismissAlertView alloc]initWithTitle:title content:message toUpdate:diss firstButtonClick:^(NSInteger clickInteger) {
+        if (clickInteger==1) {
+            [self exitApplication];
+        }else{
+            [self.updateAlert dismissWithCompletion:nil];
+        }
+    } secondButtonClick:^(NSInteger clickInteger) {
+        if (clickInteger==1) {
+            [self toConnectAppStore];
+        }else{
+            [self.updateAlert dismissWithCompletion:^{
+                [self toConnectAppStore];
+            }];
+        }
+    }];
+    self.updateAlert=[[JCAlertView alloc]initWithCustomView:alert dismissWhenTouchedBackground:NO];
+    [self.updateAlert show];
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

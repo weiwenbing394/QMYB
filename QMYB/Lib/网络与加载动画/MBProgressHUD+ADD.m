@@ -18,7 +18,7 @@
  */
 + (MBProgressHUD *)ToastInformation:(NSString *)information{
     
-    return [self showInformation:information toView:nil andAfterDelay:2];
+    return [self showInformation:information toView:nil andAfterDelay:1];
 };
 
 /**
@@ -26,7 +26,7 @@
  *  @param information 提示文字
  */
 + (MBProgressHUD *)ToastInformation:(NSString *)information toView:(UIView *)view{
-    return [self showInformation:information toView:view andAfterDelay:2];
+    return [self showInformation:information toView:view andAfterDelay:1];
 };
 
 
@@ -61,7 +61,9 @@
     
     hud.offset=CGPointMake(hud.offset.x, hud.offset.y-offSety);
     
-    hud.bezelView.backgroundColor=[UIColor blackColor];
+    hud.bezelView.backgroundColor=RGBA(0, 0, 0, 0.6);
+    
+    hud.userInteractionEnabled = NO;
     
     [hud setRemoveFromSuperViewOnHide:YES];
     
@@ -118,13 +120,13 @@
         hud.detailsLabel.font=[UIFont systemFontOfSize:GetWidth(16)];
     }
     
-    hud.bezelView.backgroundColor=[UIColor blackColor];
+    hud.bezelView.backgroundColor=RGBA(0, 0, 0, 0.6);
     
     hud.contentColor=[UIColor whiteColor];
     
     hud.margin=GetWidth(14);
     
-    hud.dimBackground=YES;
+    hud.userInteractionEnabled = YES;
     
     hud.offset=CGPointMake(hud.offset.x, hud.offset.y-offSety);
     
@@ -169,7 +171,7 @@
  *  成功图标弹出
  */
 + (void)showSuccess:(NSString *)success toView:(UIView *)view{
-    [self showCustomView:@"Checkmark" andTextString:success toView:view andAfterDelay:2];
+    [self showCustomView:@"绑定成功" andTextString:success toView:view andAfterDelay:1];
 };
 /**
  *  失败图标弹出
@@ -181,7 +183,7 @@
  *  失败图标弹出
  */
 + (void)showError:(NSString *)error toView:(UIView *)view{
-    [self showCustomView:@"Checkmark" andTextString:error toView:view andAfterDelay:2];
+    [self showCustomView:@"close" andTextString:error toView:view andAfterDelay:1];
 };
 
 
@@ -207,19 +209,21 @@
     
     hud.bezelView.style=MBProgressHUDBackgroundStyleSolidColor;
     
-    hud.bezelView.color=[UIColor greenColor];
+    hud.bezelView.backgroundColor=RGBA(0, 0, 0, 0.6);
     
     hud.label.text=textString;
     
     hud.label.font=[UIFont systemFontOfSize:GetWidth(16)];
     
-    hud.contentColor=[UIColor blackColor];
+    hud.contentColor=[UIColor whiteColor];
     
     hud.margin=GetWidth(14);
     
     hud.square=NO;
     
     hud.offset=CGPointMake(hud.offset.x, hud.offset.y-offSety);
+    
+    hud.userInteractionEnabled = NO;
     
     // 设置图片
     hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:icon]];
@@ -284,7 +288,7 @@
         
         hud.square = NO;
         
-        hud.dimBackground=YES;
+        hud.userInteractionEnabled = YES;
         
         hud.offset=CGPointMake(hud.offset.x, hud.offset.y-offSety);
         

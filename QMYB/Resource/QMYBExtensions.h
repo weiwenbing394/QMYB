@@ -22,7 +22,10 @@
 #import "IQKeyboardManager.h"
 #import "IQKeyboardReturnKeyHandler.h"
 #import "XWNetworkCache.h"
-
+#import "JCAlertView.h"
+#import "MJFooter.h"
+#import "MJHeader.h"
+#import "numberBOOL.h"
 
 //Category
 #import "UIColor+color.h"

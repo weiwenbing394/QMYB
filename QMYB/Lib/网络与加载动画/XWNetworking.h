@@ -50,6 +50,8 @@ typedef void(^XWHttpRequestCache)(id responseCache);
 typedef void( ^ XWUploadProgress)(int64_t bytesProgress,int64_t totalBytesProgress);
 /** 下载的进度*/
 typedef void( ^ XWDownloadProgress)(int64_t bytesProgress,int64_t totalBytesProgress);
+/** 网络状态的Block*/
+typedef void(^XWNetworkStatus)(NetworkStatu status);
 
 typedef NSURLSessionTask XWURLSessionTask;
 
@@ -63,19 +65,24 @@ typedef NSURLSessionTask XWURLSessionTask;
 + (XWNetworking *)sharedXWNetworking;
 
 /**
- *  开启网络监测
+ 实时获取网络状态,通过Block回调实时获取(此方法可多次调用)
  */
-+ (void)startMonitoring;
-
-/**
- *  获取网络状态
- */
-+ (NetworkStatu)checkNetStatus;
++ (void)networkStatusWithBlock:(XWNetworkStatus)networkStatus;
 
 /**
  *  是否有网络连接
  */
 + (BOOL) isHaveNetwork;
+
+/**
+ 手机网络:YES, 反之:NO
+ */
++ (BOOL)isWWANNetwork;
+
+/**
+ WiFi网络:YES, 反之:NO
+ */
++ (BOOL)isWiFiNetwork;
 
 /**
  取消所有HTTP请求

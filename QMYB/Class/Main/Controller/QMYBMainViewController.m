@@ -12,6 +12,9 @@
 #import "QMYBShouYeModel.h"
 #import "QMYBShareModel.h"
 #import "QMYBWebViewController.h"
+#import "QMYBErweimaView.h"
+
+
 
 
 @interface QMYBMainViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -19,6 +22,8 @@
 @property (nonatomic,strong)UITableView *shouyeTableview;
 
 @property (nonatomic,strong)NSMutableArray *dataSourceArray;
+
+@property (nonatomic,strong)JCAlertView *erweimaAlert;
 
 @end
 
@@ -30,18 +35,31 @@ static NSString *const tableviewCellIndentifer=@"Cell";
     [super viewDidLoad];
     [self addTitle:@"精选产品"];
     [self.shouyeTableview reloadData];
+    
+//    [XWNetworking getWithUrl:@"http://88.88.0.70:8080/getProductList?page=1&page_size=10" params:nil responseCache:^(id responseCache) {
+//        
+//    } success:^(id response) {
+//        NSLog(@"%@",response);
+//    } fail:^(NSError *error) {
+//        NSLog(@"失败");
+//    } showHud:YES];
 }
 
 #pragma mark uitableview delegate;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    QMYBShouYeTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:tableviewCellIndentifer];
-    QMYBShouYeModel *model=self.dataSourceArray[indexPath.section];
-    cell.model=model;
-    
-    QMYBShareModel *shareModel=model.shareModel;
     WeakSelf;
+    QMYBShouYeTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:tableviewCellIndentifer];
+    QMYBShouYeModel *model=weakSelf.dataSourceArray[indexPath.section];
+    cell.model=model;
+    QMYBShareModel *shareModel=model.shareModel;
+    
     cell.erweimablock=^(){
-        
+        QMYBErweimaView *erweimaView=[[QMYBErweimaView alloc]initWithFrame:CGRectMake(0, 0, GetWidth(220), GetWidth(220)+65) withImageUrlStr:model.erweimaStr];
+        erweimaView.cancelBlock=^(){
+            [weakSelf.erweimaAlert dismissWithCompletion:nil];
+        };
+        weakSelf.erweimaAlert=[[JCAlertView alloc]initWithCustomView:erweimaView dismissWhenTouchedBackground:NO];
+        [weakSelf.erweimaAlert show];
     };
     cell.shareblock=^(){
         [weakSelf touch:shareModel];
@@ -51,8 +69,9 @@ static NSString *const tableviewCellIndentifer=@"Cell";
 
 
 - (CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    QMYBShouYeModel *model=self.dataSourceArray[indexPath.section];
-    return [tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[QMYBShouYeTableViewCell class] contentViewWidth:SCREEN_WIDTH];
+//    QMYBShouYeModel *model=self.dataSourceArray[indexPath.section];
+//    return [tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[QMYBShouYeTableViewCell class] contentViewWidth:SCREEN_WIDTH];
+    return SCREEN_WIDTH*200/375.0+GetHeight(40);
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -110,6 +129,8 @@ static NSString *const tableviewCellIndentifer=@"Cell";
 }
 
 
+
+
 #pragma mark 懒加载
 - (UITableView *)shouyeTableview{
     if (!_shouyeTableview) {
@@ -120,12 +141,29 @@ static NSString *const tableviewCellIndentifer=@"Cell";
         _shouyeTableview.tableFooterView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 0.0001)];
         _shouyeTableview.tableHeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 0.0001)];
         _shouyeTableview.sectionHeaderHeight=0.0001;
-        _shouyeTableview.sectionFooterHeight=GetHeight(15);
+        _shouyeTableview.sectionFooterHeight=GetHeight(10);
         _shouyeTableview.separatorInset=UIEdgeInsetsMake(0, 0, 0, 0);
-        _shouyeTableview.separatorColor=[UIColor redColor];
+        _shouyeTableview.separatorColor=colorc3c3c3;
         [_shouyeTableview registerClass:[QMYBShouYeTableViewCell class] forCellReuseIdentifier:tableviewCellIndentifer];
         [self.view addSubview:_shouyeTableview];
         _shouyeTableview.sd_layout.leftSpaceToView(self.view,0).topSpaceToView(self.view,64).rightSpaceToView(self.view,0).bottomSpaceToView(self.view,0);
+        MJHeader *mjHeader=[MJHeader headerWithRefreshingBlock:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_shouyeTableview.mj_header endRefreshing];
+                [_shouyeTableview.mj_footer endRefreshing];
+
+            });
+        }];
+        _shouyeTableview.mj_header=mjHeader;
+        
+        MJFooter *mjFooter=[MJFooter footerWithRefreshingBlock:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_shouyeTableview.mj_header endRefreshing];
+                [_shouyeTableview.mj_footer endRefreshing];
+            });
+        }];
+        _shouyeTableview.mj_footer=mjFooter;
+        
     }
     return _shouyeTableview;
 }
@@ -136,8 +174,8 @@ static NSString *const tableviewCellIndentifer=@"Cell";
         for (int i=0; i<10; i++) {
             QMYBShouYeModel *model=[[QMYBShouYeModel alloc]init];
             model.imageURL=@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1487569575404&di=2153b9910844f3d3f7b9dae74cd4e3fc&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6c224f4a20a44623c51afdd39a22720e0df3d7ab.jpg";
-            model.titleStr=@"我是标题我是标题我是标题我是标题我是标题我是标题我是标题我是标题我是标题我是标题我是标题我是标题我是标题我是标题我是标题";
-            model.price=@"100.00";
+            model.titleStr=@"全民医保";
+            model.price=@"热销";
             model.erweimaStr=@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1487569575404&di=2153b9910844f3d3f7b9dae74cd4e3fc&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6c224f4a20a44623c51afdd39a22720e0df3d7ab.jpg";
             model.contentStr=@"http://m.qmyb.dajiabao.com/";
             

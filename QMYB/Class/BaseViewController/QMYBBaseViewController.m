@@ -19,7 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor=RGB(231, 231, 231);
+    self.view.backgroundColor=colorF3F4F5;
     [self initNavBar];
 }
 
@@ -65,10 +65,10 @@
  *  @param rightStr 右边按钮标题
  */
 - (void)addRightButton:(NSString *)rightStr{
-    CGSize rightStrSzie=[rightStr sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:16],NSFontAttributeName, nil]];
+    CGSize rightStrSzie=[rightStr sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:SystemFont(16),NSFontAttributeName, nil]];
     UIButton *rightButton=[[UIButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-25-rightStrSzie.width, 20, rightStrSzie.width+20, 44)];
     rightButton.tag=10000;
-    [rightButton.titleLabel setFont:[UIFont systemFontOfSize:16]];
+    [rightButton.titleLabel setFont:SystemFont(16)];
     [rightButton setTitle:rightStr forState:0];
     [rightButton setTitleColor:[UIColor darkGrayColor] forState:0];
     [rightButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
@@ -95,8 +95,8 @@
     if (titleLabel == nil) { //在某些页面需要修改title，所以就修改了一下
         
         titleLabel=[[UILabel alloc]initWithFrame:CGRectMake(60, 20, SCREEN_WIDTH-120, 43.5)];
-        titleLabel.textColor=[UIColor colorWithHexString:@"#5c5c5c"];
-        titleLabel.font=[UIFont systemFontOfSize:18];
+        titleLabel.textColor=color3c3a40;
+        titleLabel.font=SystemFont(18);
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.textAlignment=NSTextAlignmentCenter;
     }
@@ -104,7 +104,7 @@
     [self.view addSubview:titleLabel];
     
     UIView *line=[[UIView alloc]initWithFrame:CGRectMake(0, 63.5, SCREEN_WIDTH, 0.5)];
-    line.backgroundColor=RGB(181, 175, 168);
+    line.backgroundColor=colorb4b4b4;
     [self.view addSubview:line];
     
 };
@@ -184,7 +184,7 @@
 
 -(CGFloat)changeStationWidth:(NSString *)string anWidthTxtt:(CGFloat)widthText anfont:(CGFloat)fontSize{
     
-    UIFont * tfont = [UIFont systemFontOfSize:fontSize];
+    UIFont * tfont = SystemFont(fontSize);
     
     //高度估计文本大概要显示几行，宽度根据需求自己定义。 MAXFLOAT 可以算出具体要多高
     

@@ -40,88 +40,52 @@
 }
 
 /**
- *  开启网络监测
+ 实时获取网络状态,通过Block回调实时获取(此方法可多次调用)
  */
-+ (void)startMonitoring{
-    // 1.获得网络监控的管理者
-    AFNetworkReachabilityManager *mgr = [AFNetworkReachabilityManager sharedManager];
-    // 2.设置网络状态改变后的处理
-    [mgr setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        // 当网络状态改变了, 就会调用这个block
-        switch (status){
-            case AFNetworkReachabilityStatusUnknown: // 未知网络
-                
-                [XWNetworking sharedXWNetworking].networkStats=StatusUnknown;
-                
-                break;
-                
-            case AFNetworkReachabilityStatusNotReachable: // 没有网络(断网)
-                
-                [XWNetworking sharedXWNetworking].networkStats=StatusNotReachable;
-                
-                break;
-                
-            case AFNetworkReachabilityStatusReachableViaWWAN: // 手机自带网络
-                
-                [XWNetworking sharedXWNetworking].networkStats=StatusReachableViaWWAN;
-                
-                break;
-                
-            case AFNetworkReachabilityStatusReachableViaWiFi: // WIFI
-                
-                [XWNetworking sharedXWNetworking].networkStats=StatusReachableViaWiFi;
-                
-                break;
-        }
-    }];
-    
-    [mgr startMonitoring];
-    
-};
-
-/**
- *  获取网络状态
- */
-+ (NetworkStatu)checkNetStatus{
-    
-    [self startMonitoring];
-    
-    if ([XWNetworking sharedXWNetworking].networkStats == StatusReachableViaWiFi) {
++ (void)networkStatusWithBlock:(XWNetworkStatus)networkStatus{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+            switch (status){
+                case AFNetworkReachabilityStatusUnknown:
+                    networkStatus ? networkStatus(StatusUnknown) : nil;
+                    break;
+                case AFNetworkReachabilityStatusNotReachable:
+                    networkStatus ? networkStatus(StatusNotReachable) : nil;
+                    break;
+                case AFNetworkReachabilityStatusReachableViaWWAN:
+                    networkStatus ? networkStatus(StatusReachableViaWWAN) : nil;
+                    break;
+                case AFNetworkReachabilityStatusReachableViaWiFi:
+                    networkStatus ? networkStatus(StatusReachableViaWiFi) : nil;
+                    break;
+            }
+        }];
         
-        return StatusReachableViaWiFi;
-        
-    } else if ([XWNetworking sharedXWNetworking].networkStats == StatusNotReachable) {
-        
-        return StatusNotReachable;
-        
-    } else if ([XWNetworking sharedXWNetworking].networkStats == StatusReachableViaWWAN) {
-        
-        return StatusReachableViaWWAN;
-        
-    } else {
-        
-        return StatusUnknown;
-        
-    }
-    
+    });
 };
 
 /**
  *  是否有网络连接
  */
 + (BOOL) isHaveNetwork{
-    
-    Reachability *conn = [Reachability reachabilityForInternetConnection];
-    
-    if ([conn currentReachabilityStatus] == NotReachable) {
-        
-        return NO;
-        
-    } else {
-        
-        return YES;
-    }
+    return [AFNetworkReachabilityManager sharedManager].reachable;
 };
+
+/**
+ 手机网络:YES, 反之:NO
+ */
++ (BOOL)isWWANNetwork{
+    return [AFNetworkReachabilityManager sharedManager].reachableViaWWAN;
+}
+
+/**
+ WiFi网络:YES, 反之:NO
+ */
++ (BOOL)isWiFiNetwork{
+    return [AFNetworkReachabilityManager sharedManager].reachableViaWiFi;
+}
+
 
 /**
  取消所有HTTP请求
@@ -282,6 +246,8 @@
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             
             [[self tasks] removeObject:sessionTask];
+            
+            NSLog(@"%@",error.description);
             
             fail ? fail(error) : nil;
             
@@ -506,7 +472,7 @@
     
     //开始下载
     [sessionTask resume];
-    
+
     // 添加sessionTask到数组
     sessionTask ? [[self tasks] addObject:sessionTask] : nil ;
     
@@ -565,7 +531,7 @@
     
     //[manager.requestSerializer setValue:@"测试头文字" forHTTPHeaderField:@"服务器取值字段"];
     
-    
+
     return manager;
     
 }

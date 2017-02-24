@@ -16,8 +16,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
 //进度条
 @property (weak, nonatomic) IBOutlet UIProgressView *jinduProgress;
-//重新加载
-@property (weak, nonatomic) IBOutlet UIButton *refreshButton;
 //标题
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 

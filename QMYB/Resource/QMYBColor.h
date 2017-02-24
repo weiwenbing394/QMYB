@@ -9,6 +9,8 @@
 #ifndef QMYBColor_h
 #define QMYBColor_h
 
+#define color00aae7  [UIColor colorWithHexString:@"#00aae7"]
+
 #define colorf7f7f7  [UIColor colorWithHexString:@"#f7f7f7"]
 
 #define color434657  [UIColor colorWithHexString:@"#434657"]
@@ -66,5 +68,42 @@
 #define colorffc4c4  [UIColor colorWithHexString:@"#ffc4c4"]
 
 #define colorff3c00  [UIColor colorWithHexString:@"#ff3c00"]
+
+#define color3B3B44  [UIColor colorWithHexString:@"#3B3B44"] 
+
+#define colorF3F4F5  [UIColor colorWithHexString:@"#F3F4F5"]
+
+#define colorc2c3c4  [UIColor colorWithHexString:@"#c2c3c4"]
+
+#define colorF57FF1  [UIColor colorWithHexString:@"#F57FF1"]
+
+#define color0196FF  [UIColor colorWithHexString:@"#0196FF"]
+//文字提示颜色
+#define colord3f2fe  [UIColor colorWithHexString:@"#d3f2fe"]
+//获取验证码颜色
+#define colorffff00  [UIColor colorWithHexString:@"#ffff00"]
+//验证码倒计时颜色
+#define colorcbeaff  [UIColor colorWithHexString:@"#cbeaff"]
+//电话颜色
+#define colorc9e8ff  [UIColor colorWithHexString:@"#c9e8ff"]
+
+#define colorca2e5ff  [UIColor colorWithHexString:@"#a2e5ff"] 
+
+#define color3c3a40  [UIColor colorWithHexString:@"#3c3a40"]
+
+#define colorc3c3c3  [UIColor colorWithHexString:@"#c3c3c3"]
+
+#define color3b3b3b  [UIColor colorWithHexString:@"#3b3b3b"]
+
+#define colorb4b4b4  [UIColor colorWithHexString:@"#b4b4b4"]
+
+#define color595959  [UIColor colorWithHexString:@"#595959"]
+
+#define colorf28300  [UIColor colorWithHexString:@"#f28300"]
+
+#define color787878  [UIColor colorWithHexString:@"#787878"]
+
+#define color0086ff  [UIColor colorWithHexString:@"#0086ff"]
+
 
 #endif /* QMYBColor_h */

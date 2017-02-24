@@ -7,16 +7,21 @@
 //
 
 #import "QMYBShouyiViewController.h"
+#import "QMYBShouyiTableViewCell.h"
 
-@interface QMYBShouyiViewController (){
+@interface QMYBShouyiViewController ()<UITableViewDelegate,UITableViewDataSource>{
     UIView *topView;
 }
 
 @property (nonatomic,strong)UIViewController *pushVC;
 
+@property (nonatomic,strong)UITableView *myTableview;
+
 @end
 
 @implementation QMYBShouyiViewController
+
+static NSString *const tableviewCellIndentifer=@"Cell";
 
 - (instancetype)initWithPushViewController:(UIViewController *)pushVC{
     if (self=[super init]) {
@@ -29,14 +34,14 @@
     [super viewDidLoad];
     self.bgView.hidden=YES;
     [self initUI];
-    NSLog(@"收益记录");
+    [self.myTableview reloadData];
 }
 
 - (void)initUI{
     topView=[[UIView alloc]init];
-    topView.backgroundColor=[UIColor lightGrayColor];
+    topView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"blue-gradient"]];
     [self.view addSubview:topView];
-    topView.sd_layout.leftSpaceToView(self.view,0).rightSpaceToView(self.view,0).topSpaceToView(self.view,0).heightIs(GetHeight(44));
+    topView.sd_layout.leftSpaceToView(self.view,0).rightSpaceToView(self.view,0).topSpaceToView(self.view,0).heightIs(GetHeight(35));
     NSArray *titleArray=@[@"姓名",@"账号",@"日收益",@"当月收益"];
     CGFloat buttonWidth=SCREEN_WIDTH/4.0;
     for (int i=0; i<titleArray.count; i++) {
@@ -49,7 +54,7 @@
             button.tag=1002;
             [button addTarget:self action:@selector(selectMonth:) forControlEvents:UIControlEventTouchUpInside];
             [button setTitleColor:[UIColor darkGrayColor] forState:UIControlStateHighlighted];
-            [button setImage:[UIImage imageNamed:@"arr2"] forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:@"arr-down"] forState:UIControlStateNormal];
             [button layoutButtonWithEdgeInsetsStyle:MKButtonEdgeInsetsStyleRight imageTitleSpace:GetWidth(3)];
         }
         [topView addSubview:button];
@@ -99,6 +104,108 @@
     [sender setTitle:@"上月月收益" forState:0];
     [sender layoutButtonWithEdgeInsetsStyle:MKButtonEdgeInsetsStyleRight imageTitleSpace:GetWidth(3)];
 }
+
+#pragma mark uitableview delegate;
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    QMYBShouyiTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:tableviewCellIndentifer];
+    return cell;
+}
+
+
+- (CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return GetHeight(50);
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 1;
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
+
+
+#pragma mark 懒加载
+- (UITableView *)myTableview{
+    if (!_myTableview) {
+        _myTableview=[[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _myTableview.backgroundColor=[UIColor clearColor];
+        _myTableview.delegate=self;
+        _myTableview.dataSource=self;
+        _myTableview.tableFooterView=[self tableFootView];
+        _myTableview.tableHeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 0.0001)];
+        _myTableview.sectionHeaderHeight=0.0001;
+        _myTableview.sectionFooterHeight=0.0001;
+        _myTableview.separatorInset=UIEdgeInsetsMake(0, GetWidth(15), 0, 0);
+        _myTableview.separatorColor=colorc2c3c4;
+        [_myTableview registerClass:[QMYBShouyiTableViewCell class] forCellReuseIdentifier:tableviewCellIndentifer];
+        [self.view addSubview:_myTableview];
+        _myTableview.sd_layout.leftSpaceToView(self.view,0).topSpaceToView(self.view,GetHeight(35)).rightSpaceToView(self.view,0).bottomSpaceToView(self.view,0);
+        MJHeader *mjHeader=[MJHeader headerWithRefreshingBlock:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_myTableview.mj_header endRefreshing];
+                [_myTableview.mj_footer endRefreshing];
+                
+            });
+        }];
+        _myTableview.mj_header=mjHeader;
+        
+        MJFooter *mjFooter=[MJFooter footerWithRefreshingBlock:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_myTableview.mj_header endRefreshing];
+                [_myTableview.mj_footer endRefreshing];
+            });
+        }];
+        _myTableview.mj_footer=mjFooter;
+        
+       
+        
+    }
+    return _myTableview;
+}
+
+- (UIView *)tableFootView{
+    UIView *footView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, GetHeight(70))];
+    footView.backgroundColor=[UIColor clearColor];
+    
+    UIView *line=[[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 0.5)];
+    line.backgroundColor=RGB(181, 175, 168);
+    [footView addSubview:line];
+    
+    UILabel *huizong=[UILabel labelWithTitle:@"汇总：" color:[UIColor lightGrayColor] font:font12];
+    [footView addSubview:huizong];
+    [huizong mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.mas_equalTo(footView).offset(GetWidth(15));
+    }];
+    
+    UILabel *dangyue=[UILabel labelWithTitle:@"当月总收益：30000元" color:[UIColor lightGrayColor] font:font12];
+    [footView addSubview:dangyue];
+    [dangyue mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(huizong.mas_right).offset(GetWidth(2));
+        make.top.mas_equalTo(huizong);
+    }];
+    
+    UILabel *jinri=[UILabel labelWithTitle:@"今日总收益：30000元" color:[UIColor lightGrayColor] font:font12];
+    [footView addSubview:jinri];
+    [jinri mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(huizong.mas_right).offset(GetWidth(2));
+        make.top.mas_equalTo(huizong.mas_bottom).offset(GetHeight(5));
+    }];
+    
+    UILabel *tuidan=[UILabel labelWithTitle:@"今日退单金额：30000元" color:[UIColor lightGrayColor] font:font12];
+    [footView addSubview:tuidan];
+    [tuidan mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(huizong.mas_right).offset(GetWidth(2));
+        make.top.mas_equalTo(jinri.mas_bottom).offset(GetHeight(5));
+    }];
+    
+    return footView;
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

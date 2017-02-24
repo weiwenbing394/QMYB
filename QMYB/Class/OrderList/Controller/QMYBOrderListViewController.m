@@ -36,22 +36,27 @@ static NSString *const CollectionCell = @"CollectionCell";
     [self initUI];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle{
-    return UIStatusBarStyleLightContent;
-};
+
 
 
 - (void)initUI{
+    
+    
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     UIView *topView=[[UIView alloc]initWithFrame:CGRectMake(0, 0,SCREEN_WIDTH , 64)];
-    topView.backgroundColor=[UIColor blackColor];
+    topView.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:topView];
     segment=[[UISegmentedControl alloc]initWithItems:self.titlesArray];
     segment.selectedSegmentIndex=0;
-    segment.tintColor=[UIColor whiteColor];
-    segment.frame=CGRectMake(SCREEN_WIDTH/2.0-100, 27, 200, 30);
+    segment.tintColor=color0196FF;
+    segment.frame=CGRectMake(SCREEN_WIDTH/2.0-95, 27, 190, 30);
     [segment addTarget:self action:@selector(change:) forControlEvents:UIControlEventValueChanged];
     [topView addSubview:segment];
+    
+    UIView *line=[[UIView alloc]initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 0.5)];
+    line.backgroundColor=colorb4b4b4;
+    [self.view addSubview:line];
     
     // 创建一个流水布局
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -61,9 +66,9 @@ static NSString *const CollectionCell = @"CollectionCell";
     //cell行距
     flowLayout.minimumLineSpacing = 0;
     // 修改属性
-    flowLayout.itemSize =CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT-64-49);
+    flowLayout.itemSize =CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT-64.5-49);
     // 创建collectionView
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH,  SCREEN_HEIGHT-64-49) collectionViewLayout:flowLayout];
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64.5, SCREEN_WIDTH,  SCREEN_HEIGHT-64.5-49) collectionViewLayout:flowLayout];
     // 注册一个cell
     [collectionView registerClass:[OrderCollectionViewCell class] forCellWithReuseIdentifier:CollectionCell];
     collectionView.backgroundColor = [UIColor clearColor];
@@ -150,7 +155,7 @@ static NSString *const CollectionCell = @"CollectionCell";
 
 - (NSArray *)titlesArray {
     if (!_titlesArray) {
-        self.titlesArray = @[@"收益记录",@"交易记录"];
+        self.titlesArray = @[@"我的收益",@"我的交易"];
     }
     return _titlesArray;
 }

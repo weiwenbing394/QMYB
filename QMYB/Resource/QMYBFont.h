@@ -41,6 +41,8 @@
 
 #define font24  SystemFont(GetFont(24))
 
+#define font25  SystemFont(GetFont(25))
+
 #define font32  SystemFont(GetFont(32))
 
 

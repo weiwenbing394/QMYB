@@ -18,16 +18,18 @@
  *  当第一次使用这个类的时候就会调用一次
  */
 + (void)initialize {
+    
+    
     UINavigationBar *bar = [UINavigationBar appearance];
     [bar setBackgroundImage:[UIImage imageNamed:@"navigationbarBackgroundWhite"] forBarMetrics:UIBarMetricsDefault];
-    [bar setTitleTextAttributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:20]}];
+    [bar setTitleTextAttributes:@{NSFontAttributeName :SystemFont(18)}];
     
     //设置item
     UIBarButtonItem *item = [UIBarButtonItem appearance];
     
     NSMutableDictionary *itemAttrs = [NSMutableDictionary dictionary];
     itemAttrs[NSForegroundColorAttributeName] = [UIColor blackColor];
-    itemAttrs[NSFontAttributeName] = [UIFont systemFontOfSize:17];
+    itemAttrs[NSFontAttributeName] = SystemFont(16);
     [item setTitleTextAttributes:itemAttrs forState:UIControlStateNormal];
     
     NSMutableDictionary *itemDisabledAttrs = [NSMutableDictionary dictionary];
@@ -50,6 +52,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationBar.hidden=YES;
+    
+    
 }
 
 - (UIViewController *)childViewControllerForStatusBarStyle{
