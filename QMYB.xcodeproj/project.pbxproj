@@ -20,6 +20,7 @@
 		5119B7031E602F9500E2334F /* QMYBNewDianyuanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5119B7011E602F9500E2334F /* QMYBNewDianyuanViewController.xib */; };
 		5119B7061E60424900E2334F /* QMYBZhanghujiluController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5119B7051E60424900E2334F /* QMYBZhanghujiluController.m */; };
 		5119B7091E60428400E2334F /* QMYBJiluTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5119B7081E60428400E2334F /* QMYBJiluTableViewCell.m */; };
+		511D6DAB1E641E6900D9039F /* QMYBMonthSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 511D6DAA1E641E6900D9039F /* QMYBMonthSelectView.m */; };
 		512F7A291E5561280097F142 /* UIColor+color.m in Sources */ = {isa = PBXBuildFile; fileRef = 512F7A281E5561280097F142 /* UIColor+color.m */; };
 		512F7A2F1E55616D0097F142 /* UIView+FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 512F7A2E1E55616D0097F142 /* UIView+FontSize.m */; };
 		512F7A321E5562260097F142 /* NSArray+SafeAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 512F7A311E5562260097F142 /* NSArray+SafeAccess.m */; };
@@ -53,6 +54,10 @@
 		512F7AEB1E5694C10097F142 /* QMYBRebackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 512F7AEA1E5694C10097F142 /* QMYBRebackViewController.m */; };
 		512F7AEE1E5699FB0097F142 /* QMYBTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 512F7AED1E5699FB0097F142 /* QMYBTestViewController.m */; };
 		512F7AF21E56E7B80097F142 /* NirKxMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 512F7AF11E56E7B80097F142 /* NirKxMenu.m */; };
+		51486D641E66A0330027E9EC /* Shouyi.m in Sources */ = {isa = PBXBuildFile; fileRef = 51486D631E66A0330027E9EC /* Shouyi.m */; };
+		51486D671E66A6570027E9EC /* UserShouyi.m in Sources */ = {isa = PBXBuildFile; fileRef = 51486D661E66A6570027E9EC /* UserShouyi.m */; };
+		51486D6D1E66E49A0027E9EC /* ZhanghuList.m in Sources */ = {isa = PBXBuildFile; fileRef = 51486D6C1E66E49A0027E9EC /* ZhanghuList.m */; };
+		51486D701E66F0BC0027E9EC /* Dianyuan.m in Sources */ = {isa = PBXBuildFile; fileRef = 51486D6F1E66F0BC0027E9EC /* Dianyuan.m */; };
 		514EBEF91E543DAA00EEEBAC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 514EBEF81E543DAA00EEEBAC /* main.m */; };
 		514EBEFC1E543DAA00EEEBAC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 514EBEFB1E543DAA00EEEBAC /* AppDelegate.m */; };
 		514EBF041E543DAA00EEEBAC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 514EBF031E543DAA00EEEBAC /* Assets.xcassets */; };
@@ -68,9 +73,15 @@
 		514EBF631E54517700EEEBAC /* MBProgressHUD+ADD.m in Sources */ = {isa = PBXBuildFile; fileRef = 514EBF5E1E54517700EEEBAC /* MBProgressHUD+ADD.m */; };
 		514EBF641E54517700EEEBAC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 514EBF601E54517700EEEBAC /* Reachability.m */; };
 		514EBF651E54517700EEEBAC /* XWNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 514EBF621E54517700EEEBAC /* XWNetworking.m */; };
+		5150FF8A1E63BFBA00A1DDE3 /* QMYBTixianViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5150FF891E63BFBA00A1DDE3 /* QMYBTixianViewController.m */; };
+		5150FF8D1E63CF1100A1DDE3 /* QMYBAnquanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5150FF8C1E63CF1100A1DDE3 /* QMYBAnquanViewController.m */; };
+		5150FF901E63D5EE00A1DDE3 /* QMYBBankRegisteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5150FF8F1E63D5EE00A1DDE3 /* QMYBBankRegisteViewController.m */; };
+		5150FF931E63F32200A1DDE3 /* QMYBBankChangeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5150FF921E63F32200A1DDE3 /* QMYBBankChangeViewController.m */; };
+		5150FF971E63F5A500A1DDE3 /* CodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5150FF961E63F5A500A1DDE3 /* CodeView.m */; };
+		5150FF9A1E63FCE700A1DDE3 /* PCLockLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5150FF991E63FCE700A1DDE3 /* PCLockLabel.m */; };
+		5150FF9D1E63FF7F00A1DDE3 /* CALayer+Anim.m in Sources */ = {isa = PBXBuildFile; fileRef = 5150FF9C1E63FF7F00A1DDE3 /* CALayer+Anim.m */; };
 		5176E5371E5A8852009D8033 /* QMYBShouYeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5361E5A8852009D8033 /* QMYBShouYeTableViewCell.m */; };
 		5176E53A1E5A8FEF009D8033 /* QMYBShouYeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5391E5A8FEF009D8033 /* QMYBShouYeModel.m */; };
-		5176E53D1E5AA8F5009D8033 /* QMYBShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E53C1E5AA8F5009D8033 /* QMYBShareModel.m */; };
 		5176E5461E5AC2F2009D8033 /* QMYBWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5441E5AC2F2009D8033 /* QMYBWebViewController.m */; };
 		5176E5471E5AC2F2009D8033 /* QMYBWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5176E5451E5AC2F2009D8033 /* QMYBWebViewController.xib */; };
 		5176E54A1E5C0F6A009D8033 /* XWNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5491E5C0F6A009D8033 /* XWNetworkCache.m */; };
@@ -83,6 +94,10 @@
 		5176E5621E5D7A19009D8033 /* MJFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E5611E5D7A19009D8033 /* MJFooter.m */; };
 		5176E56B1E5D914C009D8033 /* QMYBErweimaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E56A1E5D914C009D8033 /* QMYBErweimaView.m */; };
 		5176E56F1E5D9CCD009D8033 /* NSString+BXExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5176E56E1E5D9CCD009D8033 /* NSString+BXExtension.m */; };
+		51A30EE41E67E0B300727615 /* Jiaoyi.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A30EE31E67E0B300727615 /* Jiaoyi.m */; };
+		51A30EE81E67F93B00727615 /* UserGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A30EE71E67F93B00727615 /* UserGuideViewController.m */; };
+		51B8F4C51E6558AA0012B575 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 51B8F4C41E6558AA0012B575 /* User.m */; };
+		51CCC7661E696C03003CD1DE /* TixianView.m in Sources */ = {isa = PBXBuildFile; fileRef = 51CCC7651E696C03003CD1DE /* TixianView.m */; };
 		820A9A0D3BFE88FF156EFC50 /* libPods-QMYB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20578F570452733722B4B842 /* libPods-QMYB.a */; };
 /* End PBXBuildFile section */
 
@@ -129,6 +144,8 @@
 		5119B7051E60424900E2334F /* QMYBZhanghujiluController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBZhanghujiluController.m; sourceTree = "<group>"; };
 		5119B7071E60428400E2334F /* QMYBJiluTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBJiluTableViewCell.h; sourceTree = "<group>"; };
 		5119B7081E60428400E2334F /* QMYBJiluTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBJiluTableViewCell.m; sourceTree = "<group>"; };
+		511D6DA91E641E6900D9039F /* QMYBMonthSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBMonthSelectView.h; sourceTree = "<group>"; };
+		511D6DAA1E641E6900D9039F /* QMYBMonthSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBMonthSelectView.m; sourceTree = "<group>"; };
 		512F7A221E5560430097F142 /* QMYBFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBFont.h; sourceTree = "<group>"; };
 		512F7A241E5560770097F142 /* QMYBColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBColor.h; sourceTree = "<group>"; };
 		512F7A251E5560980097F142 /* QMYBUrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBUrl.h; sourceTree = "<group>"; };
@@ -188,6 +205,14 @@
 		512F7AED1E5699FB0097F142 /* QMYBTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBTestViewController.m; sourceTree = "<group>"; };
 		512F7AF01E56E7B80097F142 /* NirKxMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NirKxMenu.h; sourceTree = "<group>"; };
 		512F7AF11E56E7B80097F142 /* NirKxMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NirKxMenu.m; sourceTree = "<group>"; };
+		51486D621E66A0330027E9EC /* Shouyi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shouyi.h; sourceTree = "<group>"; };
+		51486D631E66A0330027E9EC /* Shouyi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shouyi.m; sourceTree = "<group>"; };
+		51486D651E66A6570027E9EC /* UserShouyi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserShouyi.h; sourceTree = "<group>"; };
+		51486D661E66A6570027E9EC /* UserShouyi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserShouyi.m; sourceTree = "<group>"; };
+		51486D6B1E66E49A0027E9EC /* ZhanghuList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZhanghuList.h; sourceTree = "<group>"; };
+		51486D6C1E66E49A0027E9EC /* ZhanghuList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZhanghuList.m; sourceTree = "<group>"; };
+		51486D6E1E66F0BC0027E9EC /* Dianyuan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dianyuan.h; sourceTree = "<group>"; };
+		51486D6F1E66F0BC0027E9EC /* Dianyuan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dianyuan.m; sourceTree = "<group>"; };
 		514EBEF41E543DAA00EEEBAC /* QMYB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QMYB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		514EBEF81E543DAA00EEEBAC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		514EBEFA1E543DAA00EEEBAC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -222,12 +247,24 @@
 		514EBF611E54517700EEEBAC /* XWNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWNetworking.h; sourceTree = "<group>"; };
 		514EBF621E54517700EEEBAC /* XWNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWNetworking.m; sourceTree = "<group>"; };
 		514EBF6B1E54585C00EEEBAC /* QMYBExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBExtensions.h; sourceTree = "<group>"; };
+		5150FF881E63BFBA00A1DDE3 /* QMYBTixianViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBTixianViewController.h; sourceTree = "<group>"; };
+		5150FF891E63BFBA00A1DDE3 /* QMYBTixianViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBTixianViewController.m; sourceTree = "<group>"; };
+		5150FF8B1E63CF1100A1DDE3 /* QMYBAnquanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBAnquanViewController.h; sourceTree = "<group>"; };
+		5150FF8C1E63CF1100A1DDE3 /* QMYBAnquanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBAnquanViewController.m; sourceTree = "<group>"; };
+		5150FF8E1E63D5EE00A1DDE3 /* QMYBBankRegisteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBBankRegisteViewController.h; sourceTree = "<group>"; };
+		5150FF8F1E63D5EE00A1DDE3 /* QMYBBankRegisteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBBankRegisteViewController.m; sourceTree = "<group>"; };
+		5150FF911E63F32200A1DDE3 /* QMYBBankChangeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBBankChangeViewController.h; sourceTree = "<group>"; };
+		5150FF921E63F32200A1DDE3 /* QMYBBankChangeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBBankChangeViewController.m; sourceTree = "<group>"; };
+		5150FF951E63F5A500A1DDE3 /* CodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodeView.h; sourceTree = "<group>"; };
+		5150FF961E63F5A500A1DDE3 /* CodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodeView.m; sourceTree = "<group>"; };
+		5150FF981E63FCE700A1DDE3 /* PCLockLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCLockLabel.h; sourceTree = "<group>"; };
+		5150FF991E63FCE700A1DDE3 /* PCLockLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCLockLabel.m; sourceTree = "<group>"; };
+		5150FF9B1E63FF7F00A1DDE3 /* CALayer+Anim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+Anim.h"; sourceTree = "<group>"; };
+		5150FF9C1E63FF7F00A1DDE3 /* CALayer+Anim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+Anim.m"; sourceTree = "<group>"; };
 		5176E5351E5A8852009D8033 /* QMYBShouYeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBShouYeTableViewCell.h; sourceTree = "<group>"; };
 		5176E5361E5A8852009D8033 /* QMYBShouYeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBShouYeTableViewCell.m; sourceTree = "<group>"; };
 		5176E5381E5A8FEF009D8033 /* QMYBShouYeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBShouYeModel.h; sourceTree = "<group>"; };
 		5176E5391E5A8FEF009D8033 /* QMYBShouYeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBShouYeModel.m; sourceTree = "<group>"; };
-		5176E53B1E5AA8F5009D8033 /* QMYBShareModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBShareModel.h; sourceTree = "<group>"; };
-		5176E53C1E5AA8F5009D8033 /* QMYBShareModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBShareModel.m; sourceTree = "<group>"; };
 		5176E5431E5AC2F2009D8033 /* QMYBWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMYBWebViewController.h; sourceTree = "<group>"; };
 		5176E5441E5AC2F2009D8033 /* QMYBWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBWebViewController.m; sourceTree = "<group>"; };
 		5176E5451E5AC2F2009D8033 /* QMYBWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QMYBWebViewController.xib; sourceTree = "<group>"; };
@@ -251,6 +288,14 @@
 		5176E56A1E5D914C009D8033 /* QMYBErweimaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMYBErweimaView.m; sourceTree = "<group>"; };
 		5176E56D1E5D9CCD009D8033 /* NSString+BXExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+BXExtension.h"; sourceTree = "<group>"; };
 		5176E56E1E5D9CCD009D8033 /* NSString+BXExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+BXExtension.m"; sourceTree = "<group>"; };
+		51A30EE21E67E0B300727615 /* Jiaoyi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Jiaoyi.h; sourceTree = "<group>"; };
+		51A30EE31E67E0B300727615 /* Jiaoyi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Jiaoyi.m; sourceTree = "<group>"; };
+		51A30EE61E67F93B00727615 /* UserGuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserGuideViewController.h; sourceTree = "<group>"; };
+		51A30EE71E67F93B00727615 /* UserGuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserGuideViewController.m; sourceTree = "<group>"; };
+		51B8F4C31E6558AA0012B575 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		51B8F4C41E6558AA0012B575 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		51CCC7641E696C03003CD1DE /* TixianView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TixianView.h; sourceTree = "<group>"; };
+		51CCC7651E696C03003CD1DE /* TixianView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TixianView.m; sourceTree = "<group>"; };
 		8E2CB302F1B2679F65F683F5 /* Pods-QMYB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QMYB.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QMYB/Pods-QMYB.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -303,8 +348,8 @@
 		511649121E5FCF26009345BC /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				511649131E5FCF4C009345BC /* QMYBLoginViewController.h */,
-				511649141E5FCF4C009345BC /* QMYBLoginViewController.m */,
+				51B8F4C21E6558950012B575 /* Model */,
+				51B8F4C11E65587D0012B575 /* Controller */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -533,6 +578,7 @@
 		514EBF2A1E54417500EEEBAC /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				5150FF941E63F5A500A1DDE3 /* 验证码弹出框 */,
 				5119B6EB1E5FF38D00E2334F /* 验证 */,
 				5176E55C1E5D79A1009D8033 /* MJRefresh */,
 				5176E5581E5C3C40009D8033 /* 软件检查更新 */,
@@ -547,6 +593,7 @@
 			isa = PBXGroup;
 			children = (
 				514EBF2C1E54420800EEEBAC /* BaseViewController */,
+				51A30EE51E67F93B00727615 /* 引导页 */,
 				511649121E5FCF26009345BC /* Login */,
 				514EBF331E5442F900EEEBAC /* Main */,
 				514EBF341E54439300EEEBAC /* OrderWrite */,
@@ -628,8 +675,6 @@
 			children = (
 				5176E5381E5A8FEF009D8033 /* QMYBShouYeModel.h */,
 				5176E5391E5A8FEF009D8033 /* QMYBShouYeModel.m */,
-				5176E53B1E5AA8F5009D8033 /* QMYBShareModel.h */,
-				5176E53C1E5AA8F5009D8033 /* QMYBShareModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -690,6 +735,12 @@
 		514EBF3E1E54442000EEEBAC /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				51486D621E66A0330027E9EC /* Shouyi.h */,
+				51486D631E66A0330027E9EC /* Shouyi.m */,
+				51486D651E66A6570027E9EC /* UserShouyi.h */,
+				51486D661E66A6570027E9EC /* UserShouyi.m */,
+				51A30EE21E67E0B300727615 /* Jiaoyi.h */,
+				51A30EE31E67E0B300727615 /* Jiaoyi.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -704,6 +755,8 @@
 				5116490C1E5EEAF1009345BC /* QMYBJiaoyiTableViewCell.xib */,
 				5116490F1E5EF5DD009345BC /* QMYBShouyiTableViewCell.h */,
 				511649101E5EF5DD009345BC /* QMYBShouyiTableViewCell.m */,
+				511D6DA91E641E6900D9039F /* QMYBMonthSelectView.h */,
+				511D6DAA1E641E6900D9039F /* QMYBMonthSelectView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -722,6 +775,14 @@
 				5119B7011E602F9500E2334F /* QMYBNewDianyuanViewController.xib */,
 				5119B7041E60424900E2334F /* QMYBZhanghujiluController.h */,
 				5119B7051E60424900E2334F /* QMYBZhanghujiluController.m */,
+				5150FF881E63BFBA00A1DDE3 /* QMYBTixianViewController.h */,
+				5150FF891E63BFBA00A1DDE3 /* QMYBTixianViewController.m */,
+				5150FF8B1E63CF1100A1DDE3 /* QMYBAnquanViewController.h */,
+				5150FF8C1E63CF1100A1DDE3 /* QMYBAnquanViewController.m */,
+				5150FF8E1E63D5EE00A1DDE3 /* QMYBBankRegisteViewController.h */,
+				5150FF8F1E63D5EE00A1DDE3 /* QMYBBankRegisteViewController.m */,
+				5150FF911E63F32200A1DDE3 /* QMYBBankChangeViewController.h */,
+				5150FF921E63F32200A1DDE3 /* QMYBBankChangeViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -729,6 +790,10 @@
 		514EBF411E54442B00EEEBAC /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				51486D6B1E66E49A0027E9EC /* ZhanghuList.h */,
+				51486D6C1E66E49A0027E9EC /* ZhanghuList.m */,
+				51486D6E1E66F0BC0027E9EC /* Dianyuan.h */,
+				51486D6F1E66F0BC0027E9EC /* Dianyuan.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -741,6 +806,8 @@
 				5119B6F71E602A9600E2334F /* QMYBDianyuanListCell.xib */,
 				5119B7071E60428400E2334F /* QMYBJiluTableViewCell.h */,
 				5119B7081E60428400E2334F /* QMYBJiluTableViewCell.m */,
+				51CCC7641E696C03003CD1DE /* TixianView.h */,
+				51CCC7651E696C03003CD1DE /* TixianView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -799,6 +866,19 @@
 			path = Category;
 			sourceTree = "<group>";
 		};
+		5150FF941E63F5A500A1DDE3 /* 验证码弹出框 */ = {
+			isa = PBXGroup;
+			children = (
+				5150FF9B1E63FF7F00A1DDE3 /* CALayer+Anim.h */,
+				5150FF9C1E63FF7F00A1DDE3 /* CALayer+Anim.m */,
+				5150FF981E63FCE700A1DDE3 /* PCLockLabel.h */,
+				5150FF991E63FCE700A1DDE3 /* PCLockLabel.m */,
+				5150FF951E63F5A500A1DDE3 /* CodeView.h */,
+				5150FF961E63F5A500A1DDE3 /* CodeView.m */,
+			);
+			path = "验证码弹出框";
+			sourceTree = "<group>";
+		};
 		5176E54B1E5C0FE3009D8033 /* YYCache */ = {
 			isa = PBXGroup;
 			children = (
@@ -841,6 +921,33 @@
 				5176E56E1E5D9CCD009D8033 /* NSString+BXExtension.m */,
 			);
 			path = Nsstring;
+			sourceTree = "<group>";
+		};
+		51A30EE51E67F93B00727615 /* 引导页 */ = {
+			isa = PBXGroup;
+			children = (
+				51A30EE61E67F93B00727615 /* UserGuideViewController.h */,
+				51A30EE71E67F93B00727615 /* UserGuideViewController.m */,
+			);
+			path = "引导页";
+			sourceTree = "<group>";
+		};
+		51B8F4C11E65587D0012B575 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				511649131E5FCF4C009345BC /* QMYBLoginViewController.h */,
+				511649141E5FCF4C009345BC /* QMYBLoginViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		51B8F4C21E6558950012B575 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				51B8F4C31E6558AA0012B575 /* User.h */,
+				51B8F4C41E6558AA0012B575 /* User.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		F6AD57AE8E255456380361D1 /* Frameworks */ = {
@@ -1049,11 +1156,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51B8F4C51E6558AA0012B575 /* User.m in Sources */,
 				512F7A3E1E5563190097F142 /* UIApplication+Extensions.m in Sources */,
 				512F7AEB1E5694C10097F142 /* QMYBRebackViewController.m in Sources */,
 				514EBF651E54517700EEEBAC /* XWNetworking.m in Sources */,
 				512F7A361E55624E0097F142 /* NSDictionary+SafeAccess.m in Sources */,
 				5119B7061E60424900E2334F /* QMYBZhanghujiluController.m in Sources */,
+				51486D671E66A6570027E9EC /* UserShouyi.m in Sources */,
 				5176E5621E5D7A19009D8033 /* MJFooter.m in Sources */,
 				514EBF511E54451300EEEBAC /* QMYBOrderListViewController.m in Sources */,
 				514EBF481E5444C600EEEBAC /* QMYBBaseViewController.m in Sources */,
@@ -1066,9 +1175,14 @@
 				512F7A291E5561280097F142 /* UIColor+color.m in Sources */,
 				514EBF541E54452000EEEBAC /* QMYBMeViewController.m in Sources */,
 				5176E5461E5AC2F2009D8033 /* QMYBWebViewController.m in Sources */,
+				51CCC7661E696C03003CD1DE /* TixianView.m in Sources */,
 				512F7A481E5563F40097F142 /* UIImage+Extension.m in Sources */,
+				5150FF8A1E63BFBA00A1DDE3 /* QMYBTixianViewController.m in Sources */,
+				5150FF9A1E63FCE700A1DDE3 /* PCLockLabel.m in Sources */,
+				5150FF8D1E63CF1100A1DDE3 /* QMYBAnquanViewController.m in Sources */,
 				5119B6F81E602A9600E2334F /* QMYBDianyuanListCell.m in Sources */,
 				514EBF571E54459400EEEBAC /* QMYBNavigationController.m in Sources */,
+				51486D701E66F0BC0027E9EC /* Dianyuan.m in Sources */,
 				512F7ADF1E5690C40097F142 /* QMYBShouyiViewController.m in Sources */,
 				5176E5371E5A8852009D8033 /* QMYBShouYeTableViewCell.m in Sources */,
 				514EBF631E54517700EEEBAC /* MBProgressHUD+ADD.m in Sources */,
@@ -1080,12 +1194,16 @@
 				5176E56F1E5D9CCD009D8033 /* NSString+BXExtension.m in Sources */,
 				514EBEF91E543DAA00EEEBAC /* main.m in Sources */,
 				512F7AEE1E5699FB0097F142 /* QMYBTestViewController.m in Sources */,
+				51A30EE81E67F93B00727615 /* UserGuideViewController.m in Sources */,
+				5150FF9D1E63FF7F00A1DDE3 /* CALayer+Anim.m in Sources */,
+				51486D6D1E66E49A0027E9EC /* ZhanghuList.m in Sources */,
+				51486D641E66A0330027E9EC /* Shouyi.m in Sources */,
 				5176E5551E5C0FE3009D8033 /* YYDiskCache.m in Sources */,
 				512F7A3A1E55627A0097F142 /* UITextField+TYExtensions.m in Sources */,
-				5176E53D1E5AA8F5009D8033 /* QMYBShareModel.m in Sources */,
 				5176E5561E5C0FE3009D8033 /* YYKVStorage.m in Sources */,
 				511649111E5EF5DD009345BC /* QMYBShouyiTableViewCell.m in Sources */,
 				512F7AF21E56E7B80097F142 /* NirKxMenu.m in Sources */,
+				5150FF971E63F5A500A1DDE3 /* CodeView.m in Sources */,
 				5176E55F1E5D79BB009D8033 /* MJHeader.m in Sources */,
 				512F7A321E5562260097F142 /* NSArray+SafeAccess.m in Sources */,
 				512F7A441E5563A60097F142 /* UIButton+Extension.m in Sources */,
@@ -1093,6 +1211,7 @@
 				514EBF4E1E5444FF00EEEBAC /* QMYBOrderWriteViewController.m in Sources */,
 				5119B6F11E60254500E2334F /* QMYBTuijianZhuceViewController.m in Sources */,
 				511649151E5FCF4C009345BC /* QMYBLoginViewController.m in Sources */,
+				5150FF931E63F32200A1DDE3 /* QMYBBankChangeViewController.m in Sources */,
 				512F7AE81E5694B20097F142 /* QMYBCompletedViewController.m in Sources */,
 				5119B6F41E602A5A00E2334F /* QMYBDianyuanListViewController.m in Sources */,
 				5176E54A1E5C0F6A009D8033 /* XWNetworkCache.m in Sources */,
@@ -1103,7 +1222,10 @@
 				5176E53A1E5A8FEF009D8033 /* QMYBShouYeModel.m in Sources */,
 				512F7A4C1E5564FC0097F142 /* UILabel+Extension.m in Sources */,
 				514EBF321E54427E00EEEBAC /* QMYBTabBarController.m in Sources */,
+				51A30EE41E67E0B300727615 /* Jiaoyi.m in Sources */,
 				512F7ADC1E568E830097F142 /* OrderCollectionViewCell.m in Sources */,
+				5150FF901E63D5EE00A1DDE3 /* QMYBBankRegisteViewController.m in Sources */,
+				511D6DAB1E641E6900D9039F /* QMYBMonthSelectView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1232,6 +1354,7 @@
 			baseConfigurationReference = 8E2CB302F1B2679F65F683F5 /* Pods-QMYB.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = D3S96SQKWE;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1249,7 +1372,7 @@
 					"$(PROJECT_DIR)/QMYB/Lib/友盟/UMSocial_Sdk_Extra_Frameworks/Wechat",
 					"$(PROJECT_DIR)/QMYB/Lib/友盟/SocialLibraries/WeChat",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dajiabao.QMYB;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dajiabao.ffb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1259,6 +1382,7 @@
 			baseConfigurationReference = 4A8B024D40F37D81E69C5CA9 /* Pods-QMYB.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = D3S96SQKWE;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1276,7 +1400,7 @@
 					"$(PROJECT_DIR)/QMYB/Lib/友盟/UMSocial_Sdk_Extra_Frameworks/Wechat",
 					"$(PROJECT_DIR)/QMYB/Lib/友盟/SocialLibraries/WeChat",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dajiabao.QMYB;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dajiabao.ffb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

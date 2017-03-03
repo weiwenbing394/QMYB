@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class Shouyi;
 
 @interface QMYBShouyiTableViewCell : UITableViewCell
 
@@ -17,5 +18,7 @@
 @property (nonatomic,strong)UILabel *rishouyiLabel;
 
 @property (nonatomic,strong)UILabel *monthLabel;
+
+@property (nonatomic,strong)Shouyi  *model;
 
 @end

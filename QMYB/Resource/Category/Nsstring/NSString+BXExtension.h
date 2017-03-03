@@ -49,7 +49,6 @@
 //邮箱
 + (BOOL)validateEmail:(NSString *)email;
 
-//返回银行卡号
-+ (NSString *)returnBankName:(NSString*) idCard;
+
 
 @end

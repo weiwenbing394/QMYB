@@ -75,16 +75,6 @@ typedef NSURLSessionTask XWURLSessionTask;
 + (BOOL) isHaveNetwork;
 
 /**
- 手机网络:YES, 反之:NO
- */
-+ (BOOL)isWWANNetwork;
-
-/**
- WiFi网络:YES, 反之:NO
- */
-+ (BOOL)isWiFiNetwork;
-
-/**
  取消所有HTTP请求
  */
 + (void)cancelAllRequest;
@@ -98,48 +88,48 @@ typedef NSURLSessionTask XWURLSessionTask;
 /**
  *  Get请求,返回json,无缓存
  */
-+ (XWURLSessionTask *)getWithUrl:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
++ (XWURLSessionTask *)getJsonWithUrl:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 
 /**
  *  POST请求,返回json,无缓存
  */
-+ (XWURLSessionTask *)postWithUrl:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
++ (XWURLSessionTask *)postJsonWithUrl:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 /**
  *  Get请求,返回data,无缓存
  */
-+ (XWURLSessionTask *)getWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
++ (XWURLSessionTask *)getDataWithUrl:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 
 /**
  *  POST请求,返回data,无缓存
  */
-+ (XWURLSessionTask *)postWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
++ (XWURLSessionTask *)postDataWithUrl:(NSString *)url params:(NSDictionary *)params success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 
 #pragma mark 有缓存请求
 /**
  *  Get请求,返回json,有缓存
  */
-+ (XWURLSessionTask *)getWithUrl:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
++ (XWURLSessionTask *)getJsonWithUrl:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 
 /**
  *  POST请求,返回json,有缓存
  */
-+ (XWURLSessionTask *)postWithUrl:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
++ (XWURLSessionTask *)postJsonWithUrl:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 /**
  *  Get请求,返回data,有缓存
  */
-+ (XWURLSessionTask *)getWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
++ (XWURLSessionTask *)getDataWithUrl:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 
 /**
  *  POST请求,返回data,有缓存
  */
-+ (XWURLSessionTask *)postWithUrlAndResponseData:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
++ (XWURLSessionTask *)postDataWithUrl:(NSString *)url params:(NSDictionary *)params responseCache:(XWHttpRequestCache)responseCache success:(XWResponseSuccess)success fail:(XWResponseFail)fail showHud:(BOOL)showHUD;
 
 
 

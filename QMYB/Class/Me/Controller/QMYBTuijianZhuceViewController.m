@@ -8,7 +8,9 @@
 
 #import "QMYBTuijianZhuceViewController.h"
 
-@interface QMYBTuijianZhuceViewController ()
+@interface QMYBTuijianZhuceViewController (){
+    UIImageView *erweima;
+}
 
 @end
 
@@ -33,8 +35,7 @@
         make.top.mas_equalTo(GetHeight(195));
     }];
     
-    UIImageView *erweima=[[UIImageView alloc]init];
-    erweima.image=[UIImage imageNamed:@"渐变"];
+    erweima=[[UIImageView alloc]init];
     [view addSubview:erweima];
     [erweima mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.mas_equalTo(view).offset(3);
@@ -51,7 +52,34 @@
         make.height.mas_equalTo(GetWidth(178)*56/356.0);
     }];
     
+    NSString *url=[NSString stringWithFormat:@"%@%@",APPHOSTURL,registerPage];
+    [XWNetworking getJsonWithUrl:url params:nil responseCache:^(id responseCache) {
+        if ([self isNetworkRunning]==NO) {
+            [self saveData:responseCache];
+        }
+    } success:^(id response) {
+        [self saveData:response];
+    } fail:^(NSError *error) {
+        [MBProgressHUD showError:@"刷新二维码失败"];
+    } showHud:YES];
+    
 }
+
+#pragma mark 保存更新用户数据
+- (void)saveData:(id)response{
+    NSLog(@"===%@",response);
+    if (response) {
+        NSInteger statusCode=[response integerForKey:@"code"];
+        if (statusCode==0) {
+            NSString *errorMsg=[response stringForKey:@"msg"];
+            [MBProgressHUD showError:errorMsg];
+        }else{
+            NSString *urlStr=[response stringForKey:@"data"];
+            [erweima sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"空白图"]];
+        }
+    }
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

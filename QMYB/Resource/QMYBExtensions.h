@@ -26,6 +26,7 @@
 #import "MJFooter.h"
 #import "MJHeader.h"
 #import "numberBOOL.h"
+#import "MJExtension.h"
 
 //Category
 #import "UIColor+color.h"
@@ -40,6 +41,5 @@
 #import "NSArray+SafeAccess.h"
 #import "UIButton+Extension.h"
 #import "UIView+Extension.h"
-
 
 #endif /* QMYBExtensions_h */

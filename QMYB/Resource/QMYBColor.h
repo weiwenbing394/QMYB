@@ -104,6 +104,10 @@
 #define color787878  [UIColor colorWithHexString:@"#787878"]
 
 #define color0086ff  [UIColor colorWithHexString:@"#0086ff"]
+//收益颜色
+#define colorf28300  [UIColor colorWithHexString:@"#f28300"]
+//已退单颜色
+#define color00bc54  [UIColor colorWithHexString:@"#00bc54"]
 
-
+#define color9d9d9d  [UIColor colorWithHexString:@"#9d9d9d"]
 #endif /* QMYBColor_h */

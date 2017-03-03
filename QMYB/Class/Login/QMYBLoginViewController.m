@@ -8,6 +8,8 @@
 
 #import "QMYBLoginViewController.h"
 #import "QMYBTabBarController.h"
+#import "CodeView.h"
+#import "User.h"
 
 @interface QMYBLoginViewController ()<UITextFieldDelegate>{
     UITextField *userNameFiled;
@@ -17,6 +19,10 @@
     UIView *userLine;
     UIView *wordLine;
 }
+
+@property (nonatomic, copy)   NSString *guid;
+
+@property (nonatomic, strong) JCAlertView *alertView;
 
 @end
 
@@ -32,6 +38,7 @@
 - (BOOL)prefersStatusBarHidden{
     return YES;
 }
+
 
 //界面布局
 - (void)initUI{
@@ -83,7 +90,7 @@
     attr[NSForegroundColorAttributeName] = colord3f2fe;
     NSMutableAttributedString *holder = [[NSMutableAttributedString alloc]initWithString:@"请输入手机号" attributes:attr];
     userNameFiled.attributedPlaceholder = holder;
-    userNameFiled.keyboardType=UIKeyboardTypeDecimalPad;
+    userNameFiled.keyboardType=UIKeyboardTypeNumberPad;
     userNameFiled.clearButtonMode=UITextFieldViewModeWhileEditing;
     [userNameFiled addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
     [contentView addSubview:userNameFiled];
@@ -115,6 +122,7 @@
     }];
     
     getCodeButton=[UIButton buttonWithTitle:@"获取验证码" titleColor:colorffff00 font:font15 target:self action:@selector(getCode:)];
+    getCodeButton.tag=100;
     [getCodeButton setTitleColor:colord3f2fe forState:UIControlStateDisabled];
     [contentView addSubview:getCodeButton];
     [getCodeButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -138,7 +146,7 @@
     
     passwordFiled=[[UITextField alloc]init];
     passwordFiled.font=font15;
-    passwordFiled.keyboardType=UIKeyboardTypeDecimalPad;
+    passwordFiled.keyboardType=UIKeyboardTypeNumberPad;
     passwordFiled.clearButtonMode=UITextFieldViewModeWhileEditing;
     passwordFiled.delegate=self;
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
@@ -168,10 +176,11 @@
     
     
     loginButton=[UIButton buttonWithTitle:@"" titleColor:[UIColor orangeColor] font:font17 target:self action:@selector(login:)];
-    [loginButton setImage:[UIImage imageNamed:@"bt-normal"] forState:0];
-    [loginButton setImage:[UIImage imageNamed:@"bt-forbidden"] forState:UIControlStateDisabled];
-    [loginButton setImage:[UIImage imageNamed:@"bt-click"] forState:UIControlStateHighlighted];
-//    loginButton.enabled=NO;
+    loginButton.tag=101;
+    [loginButton setBackgroundImage:[UIImage imageNamed:@"bt-normal"] forState:0];
+    [loginButton setBackgroundImage:[UIImage imageNamed:@"bt-forbidden"] forState:UIControlStateDisabled];
+    [loginButton setBackgroundImage:[UIImage imageNamed:@"bt-click"] forState:UIControlStateHighlighted];
+    loginButton.enabled=NO;
     [contentView addSubview:loginButton];
     [loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(wordLine.mas_bottom).offset(GetHeight(65));
@@ -193,7 +202,7 @@
     [callPhone mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(self.view);
         make.bottom.mas_equalTo(-GetHeight(30));
-        make.height.mas_equalTo(30);
+        make.height.mas_equalTo(44);
     }];
 }
 
@@ -211,14 +220,19 @@
     [self presentViewController:phoneAlert animated:YES completion:nil];
 }
 
-
+//获取短信验证码
 - (void)getCode:(UIButton *)sender{
     [self.view endEditing:YES];
     if (![numberBOOL checkTelNumber:userNameFiled.text]) {
         [MBProgressHUD ToastInformation:@"请输入正确的手机号"];
         return;
     }
-    [self autoCodeDecler];
+    if (0==self.guid.length) {
+        //获取sid
+        [self getSid:sender];
+    }else{
+        [self getSnsCode:self.guid];
+    }
 }
 
 #pragma mark 验证码倒计时
@@ -249,16 +263,155 @@
 
 - (void)login:(UIButton *)sender{
     [self.view endEditing:YES];
-//    if (![numberBOOL checkTelNumber:userNameFiled.text]) {
-//        [MBProgressHUD ToastInformation:@"请输入正确的手机号"];
-//        return;
-//    }
-//    if (0==passwordFiled.text.length) {
-//        [MBProgressHUD ToastInformation:@"请输入正确的验证码"];
-//        return;
-//    }
-    QMYBTabBarController *rootVC=[[QMYBTabBarController alloc]init];
-    KeyWindow.rootViewController=rootVC;
+    if (![numberBOOL checkTelNumber:userNameFiled.text]) {
+        [MBProgressHUD ToastInformation:@"请输入正确的手机号"];
+        return;
+    }
+    if (0==passwordFiled.text.length) {
+        [MBProgressHUD ToastInformation:@"请输入正确的验证码"];
+        return;
+    }
+    if (0==self.guid.length){
+        [self getSid:sender];
+    }else{
+        [self checkPhoneCode:self.guid];
+    }
+}
+
+
+
+//获取sid
+- (void)getSid:(UIButton *)btn{
+    NSString *urlStr=[NSString stringWithFormat:@"%@%@",codeUrl,@"/verify/sid?"];
+    [XWNetworking getJsonWithUrl:urlStr params:nil success:^(id response) {
+        NSDictionary *dic=response;
+        NSInteger code=[dic integerForKey:@"code"];
+        if (code==1) {
+            NSDictionary *dataDic=[dic objectForKey:@"data"];
+            NSString *sidStr=[dataDic objectForKey:@"sid"];
+            self.guid=sidStr;
+            if(btn.tag==100){
+                [self getSnsCode:sidStr];
+            }else if(btn.tag==101){
+                [self checkPhoneCode:sidStr];
+            }
+        }
+    } fail:^(NSError *error) {
+        [MBProgressHUD showError:@"服务器繁忙"];
+    } showHud:YES];
+}
+
+
+#pragma mark 有sid * 获取短信验证码 *
+- (void)getSnsCode:(NSString *)sid{
+    NSString *urlStr=[NSString stringWithFormat:@"%@/verify/sms",codeUrl];
+    NSDictionary *dic=@{@"code":@"",@"phone":[self clearSpace:userNameFiled.text],@"smsCode":@"TYHJ_BBG_DXYZ",@"sid":sid};
+    [XWNetworking postJsonWithUrl:urlStr params:dic success:^(id response) {
+         NSDictionary *dic=response;
+         NSInteger code=[dic integerForKey:@"code"];
+            if (code == -1) {
+                //弹出图片输入框
+                [self getImageCode:sid];
+            } else if (code == 1) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [MBProgressHUD showSuccess:@"短信已发送"];
+                    //手机验证码发送成功
+                    [self autoCodeDecler];
+                });
+            }else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString *errorMsg=[dic objectForKey:@"message"];
+                    [MBProgressHUD showError:errorMsg];
+                });
+            }
+    } fail:^(NSError *error) {
+        [MBProgressHUD showError:@"服务器繁忙"];
+    } showHud:YES];
+}
+/**
+ *  需要图片验证码，弹出图片验证码
+ */
+- (void)getImageCode:(NSString *)sid{
+    CodeView *codeView=[[CodeView alloc]init];
+    [codeView initWithPhoneNumber:[self clearSpace:userNameFiled.text] PostId:sid okBlock:^(NSString *str, NSString *imageCode) {
+        [self.alertView dismissWithCompletion:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD showSuccess:@"短信已发送"];
+                [self autoCodeDecler];
+                [self setNeedsStatusBarAppearanceUpdate];
+            });
+        }];
+    } cancelBlock:^{
+        [self.alertView dismissWithCompletion:^{
+            [self setNeedsStatusBarAppearanceUpdate];
+        }];
+    }];
+    self.alertView=[[JCAlertView alloc]initWithCustomView:codeView dismissWhenTouchedBackground:NO];
+    [self.alertView show];
+    
+}
+
+/**
+ *  验证手机短信验证码
+ */
+- (void)checkPhoneCode:(NSString *)sid{
+    NSString *urlStr=[NSString stringWithFormat:@"%@%@",codeUrl,@"/verify/checksmscode"];
+    NSDictionary *dic=@{@"code":[self clearSpace:passwordFiled.text],@"phone":[self clearSpace:userNameFiled.text],@"sid":sid};
+    [XWNetworking postJsonWithUrl:urlStr params:dic success:^(id response) {
+        NSDictionary *dic=response;
+        NSInteger code=[dic integerForKey:@"code"];
+        if (code==1) {
+            [self beginLogin:sid];
+        }else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSString  *errMessage=[dic objectForKey:@"message"];
+                [MBProgressHUD showError:errMessage];
+            });
+        }
+    } fail:^(NSError *error) {
+        [MBProgressHUD showError:@"系统繁忙"];
+    } showHud:YES];
+}
+
+//短信验证码验证成功开始登录
+- (void)beginLogin:(NSString *)sid{
+    
+    NSString *url=[NSString stringWithFormat:@"%@%@",APPHOSTURL,LOGINURL];
+    NSDictionary *dic=@{@"phone":[self clearSpace:userNameFiled.text]};
+    [XWNetworking postJsonWithUrl:url params:dic success:^(id response) {
+        [self saveData:response];
+    } fail:^(NSError *error) {
+        [MBProgressHUD showError:@"系统繁忙"];
+    } showHud:YES];
+}
+
+//保存数据
+- (void)saveData:(id)response{
+    NSLog(@"开始请求%@",response);
+    if (response) {
+        NSInteger statusCode=[response integerForKey:@"code"];
+        
+        if (statusCode==0) {
+            
+            NSString *errorMsg=[response stringForKey:@"msg"];
+            [MBProgressHUD showError:errorMsg];
+            
+        }else{
+            
+            NSString *tokenID=response[@"tokenId"]!=[NSNull null]?response[@"tokenId"]:@"";
+            NSInteger userId=[response[@"data"] integerForKey:@"userId"];
+            User *user=[User mj_objectWithKeyValues:response[@"data"]];
+            NSData *userData=[NSKeyedArchiver archivedDataWithRootObject:user];
+            
+            [UserDefaults setObject:tokenID forKey:TOKENID ];
+            [UserDefaults setInteger:userId forKey:USERID];
+            [UserDefaults setObject:userData forKey:USER];
+            [UserDefaults synchronize];
+            
+            QMYBTabBarController *rootVC=[[QMYBTabBarController alloc]init];
+            KeyWindow.rootViewController=rootVC;
+        }
+     }
 }
 
 #pragma mark - 输入框改变事件
@@ -309,6 +462,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 

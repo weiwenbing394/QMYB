@@ -102,11 +102,11 @@
 
 
 - (void)setModel:(QMYBShouYeModel *)model{
-    [self.topImageView sd_setImageWithURL:[NSURL URLWithString:model.imageURL]placeholderImage:nil];
+    [self.topImageView sd_setImageWithURL:[NSURL URLWithString:model.productImage]placeholderImage:[UIImage imageNamed:@"空白图"]];
     
-    self.titleLabel.text=model.titleStr?model.titleStr:@"";
+    self.titleLabel.text=model.productName?model.productName:@"";
     
-    self.desLabel.text=model.price?model.price:@"";
+    self.desLabel.text=@"热销";
     
     CGFloat stringWidth=[self.titleLabel.text boundingRectWithSize:CGSizeMake(MAXFLOAT, GetWidth(40)) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font17} context:nil].size.width;
     
@@ -116,7 +116,7 @@
         make.width.mas_equalTo(desWidth+10);
     }];
     
-    if (0<model.price.length) {
+    if (0<self.desLabel.text.length) {
         self.desLabel.layer.cornerRadius=2;
         self.desLabel.borderColor=colorF57FF1;
         self.desLabel.borderWidth=0.5;

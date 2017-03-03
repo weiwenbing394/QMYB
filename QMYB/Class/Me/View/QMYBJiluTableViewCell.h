@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class ZhanghuList;
 
 @interface QMYBJiluTableViewCell : UITableViewCell
 
@@ -15,5 +16,7 @@
 @property (nonatomic,strong)UILabel *dataLabel;
 
 @property (nonatomic,strong)UILabel *priceLabel;
+
+@property (nonatomic,strong)ZhanghuList *model;
 
 @end

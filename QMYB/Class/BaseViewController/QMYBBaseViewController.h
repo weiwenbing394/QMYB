@@ -70,6 +70,15 @@
  *  @return 去处空格后的字符
  */
 - (NSString *)clearSpace:(NSString *)str;
+
+/**
+ *  去除字符串所有空格
+ *
+ *  @param str 去处空格前的字符
+ *
+ *  @return 去处空格后的字符
+ */
+- (NSString *)clearAllSpace:(NSString *)str;
 /**
  *  网络是否可用
  *
@@ -92,5 +101,15 @@
 
 /** 设置IQKeyBorderManager */
 - (void)setIQKeyBorderManager;
+
+//设置银行卡号样式
+- (NSString *)BankNum:(NSString *)bankID;
+
+
+//缺省页
+- (UIView *)noMessageView :(NSString *)str;
+
+//返回银行卡号
+- (NSString *)returnBankName:(NSString*) idCard;
 
 @end

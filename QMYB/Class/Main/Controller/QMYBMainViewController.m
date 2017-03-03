@@ -10,12 +10,9 @@
 #import "WXApi.h"
 #import "QMYBShouYeTableViewCell.h"
 #import "QMYBShouYeModel.h"
-#import "QMYBShareModel.h"
 #import "QMYBWebViewController.h"
 #import "QMYBErweimaView.h"
-
-
-
+#import "User.h"
 
 @interface QMYBMainViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -24,6 +21,14 @@
 @property (nonatomic,strong)NSMutableArray *dataSourceArray;
 
 @property (nonatomic,strong)JCAlertView *erweimaAlert;
+
+@property (nonatomic,assign) NSInteger page;
+
+@property (nonatomic,assign) NSInteger pageSize;
+
+@property (nonatomic,assign) NSInteger maxSize;
+
+@property (nonatomic,strong)UIView *noDataView;
 
 @end
 
@@ -34,15 +39,87 @@ static NSString *const tableviewCellIndentifer=@"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self addTitle:@"精选产品"];
-    [self.shouyeTableview reloadData];
-    
-//    [XWNetworking getWithUrl:@"http://88.88.0.70:8080/getProductList?page=1&page_size=10" params:nil responseCache:^(id responseCache) {
-//        
-//    } success:^(id response) {
-//        NSLog(@"%@",response);
-//    } fail:^(NSError *error) {
-//        NSLog(@"失败");
-//    } showHud:YES];
+    self.pageSize=10;
+    [self.shouyeTableview.mj_header beginRefreshing];
+    [self updateUser];
+ }
+
+
+#pragma mark 更新用户信息
+- (void)updateUser{
+    NSLog(@"更新用户信息");
+    NSString *url=[NSString stringWithFormat:@"%@%@",APPHOSTURL,updateUserInfo];
+    User  *user=[NSKeyedUnarchiver unarchiveObjectWithData:[UserDefaults objectForKey:USER] ];
+    NSDictionary *dic=@{@"phone":user.phone};
+    [XWNetworking postJsonWithUrl:url params:dic success:^(id response) {
+        [self saveData:response];
+    } fail:^(NSError *error) {
+        
+    } showHud:NO];
+}
+
+#pragma mark 保存更新用户数据
+- (void)saveData:(id)response{
+    if (response) {
+        NSInteger statusCode=[response integerForKey:@"code"];
+        if (statusCode==0) {
+        }else{
+            NSString *tokenID=response[@"tokenId"]!=[NSNull null]?response[@"tokenId"]:@"";
+            NSInteger userId=[response[@"data"] integerForKey:@"userId"];
+            User *user=[User mj_objectWithKeyValues:response[@"data"]];
+            NSData *userData=[NSKeyedArchiver archivedDataWithRootObject:user];
+            [UserDefaults setObject:tokenID forKey:TOKENID ];
+            [UserDefaults setInteger:userId forKey:USERID];
+            [UserDefaults setObject:userData forKey:USER];
+            [UserDefaults synchronize];
+        }
+    }
+}
+
+#pragma mark 下拉刷新
+- (void)savelist:(id)response{
+    //NSLog(@"%@",response);
+    if (response) {
+        NSInteger statusCode=[response integerForKey:@"code"];
+        if (statusCode==0) {
+            NSString *errorMsg=[response stringForKey:@"msg"];
+            [MBProgressHUD showError:errorMsg];
+        }else{
+           [self.dataSourceArray removeAllObjects];
+           self.maxSize=[response[@"data"] integerForKey:@"totalAmount"];
+           NSArray *dataArray=[QMYBShouYeModel mj_objectArrayWithKeyValuesArray:response[@"data"][@"productList"]];
+           [self.dataSourceArray addObjectsFromArray:dataArray];
+           if (self.dataSourceArray.count<self.maxSize) {
+                [self addMJ_Footer];
+            }
+            if (self.dataSourceArray.count==0) {
+                [self.shouyeTableview addSubview:self.noDataView];
+            }else{
+                [self.noDataView removeFromSuperview];
+            }
+            [self.shouyeTableview reloadData];
+        }
+    }
+}
+
+
+#pragma mark 获取更多产品数据
+- (void)addlist:(id)response{
+    if (response) {
+        NSInteger statusCode=[response integerForKey:@"code"];
+        if (statusCode==0) {
+            NSString *errorMsg=[response stringForKey:@"msg"];
+            [MBProgressHUD showError:errorMsg];
+        }else{
+            self.maxSize=[response[@"data"] integerForKey:@"totalAmount"];
+            NSArray *dataArray=[QMYBShouYeModel mj_objectArrayWithKeyValuesArray:response[@"data"][@"productList"]];
+            [self.dataSourceArray addObjectsFromArray:dataArray];
+            if (self.dataSourceArray.count>=self.maxSize) {
+                [_shouyeTableview.mj_footer endRefreshingWithNoMoreData];
+            }
+            [self.shouyeTableview reloadData];
+        }
+    }
 }
 
 #pragma mark uitableview delegate;
@@ -51,10 +128,8 @@ static NSString *const tableviewCellIndentifer=@"Cell";
     QMYBShouYeTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:tableviewCellIndentifer];
     QMYBShouYeModel *model=weakSelf.dataSourceArray[indexPath.section];
     cell.model=model;
-    QMYBShareModel *shareModel=model.shareModel;
-    
     cell.erweimablock=^(){
-        QMYBErweimaView *erweimaView=[[QMYBErweimaView alloc]initWithFrame:CGRectMake(0, 0, GetWidth(220), GetWidth(220)+65) withImageUrlStr:model.erweimaStr];
+        QMYBErweimaView *erweimaView=[[QMYBErweimaView alloc]initWithFrame:CGRectMake(0, 0, GetWidth(275), GetWidth(275)+65) withImageUrlStr:model.qrUrl];
         erweimaView.cancelBlock=^(){
             [weakSelf.erweimaAlert dismissWithCompletion:nil];
         };
@@ -62,15 +137,13 @@ static NSString *const tableviewCellIndentifer=@"Cell";
         [weakSelf.erweimaAlert show];
     };
     cell.shareblock=^(){
-        [weakSelf touch:shareModel];
+        [weakSelf touch:model];
     };
     return cell;
 }
 
 
 - (CGFloat )tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-//    QMYBShouYeModel *model=self.dataSourceArray[indexPath.section];
-//    return [tableView cellHeightForIndexPath:indexPath model:model keyPath:@"model" cellClass:[QMYBShouYeTableViewCell class] contentViewWidth:SCREEN_WIDTH];
     return SCREEN_WIDTH*200/375.0+GetHeight(40);
 }
 
@@ -88,17 +161,17 @@ static NSString *const tableviewCellIndentifer=@"Cell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     QMYBShouYeModel *model=self.dataSourceArray[indexPath.section];
     QMYBWebViewController *webViewController=[[QMYBWebViewController alloc]init];
-    webViewController.urlStr=model.contentStr;
+    webViewController.urlStr=model.saleUrl;
     [self.navigationController pushViewController:webViewController animated:YES];
 }
 
 
-//分享到朋友圈
-- (void)touch:(QMYBShareModel *)shareModel{
+#pragma mark 分享到朋友圈
+- (void)touch:(QMYBShouYeModel *)model{
     if ([WXApi isWXAppInstalled]) {
         WeakSelf;
         [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
-            [weakSelf shareWebPageToPlatformType:platformType withModel:shareModel] ;
+            [weakSelf shareWebPageToPlatformType:platformType withModel:model] ;
         }];
     }else{
         UIAlertController *alertController=[UIAlertController alertControllerWithTitle:@"提醒" message:@"您尚未安装微信客户端，暂无法使用微信分享功能" preferredStyle:UIAlertControllerStyleAlert];
@@ -108,14 +181,14 @@ static NSString *const tableviewCellIndentifer=@"Cell";
     }
 }
 
-- (void)shareWebPageToPlatformType:(UMSocialPlatformType)platformType withModel:(QMYBShareModel *)shareModel{
+- (void)shareWebPageToPlatformType:(UMSocialPlatformType)platformType withModel:(QMYBShouYeModel *)shareModel{
     //创建分享消息对象
     UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
     //创建网页内容对象
-    NSString* thumbURL =  shareModel.shareImageStr;
-    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:shareModel.shareTitle descr:shareModel.shareDes thumImage:thumbURL];
+    NSString* thumbURL =  shareModel.shareImagePath;
+    UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:shareModel.title descr:shareModel.subhead thumImage:thumbURL];
     //设置网页地址
-    shareObject.webpageUrl = shareModel.contentStr;
+    shareObject.webpageUrl = shareModel.shareUrl;
     //分享消息对象设置分享内容对象
     messageObject.shareObject = shareObject;
     //调用分享接口
@@ -129,7 +202,59 @@ static NSString *const tableviewCellIndentifer=@"Cell";
 }
 
 
+#pragma mark 增加addMJ_Head
+- (void)addMJheader{
+    MJHeader *mjHeader=[MJHeader headerWithRefreshingBlock:^{
+        self.page=1;
+        NSString *url=[NSString stringWithFormat:@"%@%@",APPHOSTURL,ProductList];
+        NSDictionary *dic=@{@"page":@(self.page),@"pageSize":@(self.pageSize)};
+        [XWNetworking postJsonWithUrl:url params:dic responseCache:^(id responseCache) {
+            if ([self isNetworkRunning]==NO) {
+                [self savelist:responseCache];
+                [self endFreshAndLoadMore];
+            }
+        } success:^(id response) {
+            [self savelist:response];
+            [self endFreshAndLoadMore];
+        } fail:^(NSError *error) {
+            [MBProgressHUD showError:@"获取数据失败"];
+            [self endFreshAndLoadMore];
+        } showHud:NO];
+    }];
+    _shouyeTableview.mj_header=mjHeader;
+}
 
+#pragma mark 增加addMJ_Footer
+- (void)addMJ_Footer{
+    MJFooter *mjFooter=[MJFooter footerWithRefreshingBlock:^{
+        self.page++;
+        NSString *url=[NSString stringWithFormat:@"%@%@",APPHOSTURL,ProductList];
+        NSDictionary *dic=@{@"page":@(self.page),@"pageSize":@(self.pageSize)};
+        [XWNetworking postJsonWithUrl:url params:dic responseCache:^(id responseCache) {
+            if ([self isNetworkRunning]==NO) {
+                [self addlist:responseCache];
+                [self endFreshAndLoadMore];
+            }
+        } success:^(id response) {
+            [self addlist:response];
+            [self endFreshAndLoadMore];
+        } fail:^(NSError *error) {
+            [MBProgressHUD showError:@"获取数据失败"];
+            [self endFreshAndLoadMore];
+        } showHud:NO];
+    }];
+    _shouyeTableview.mj_footer=mjFooter;
+}
+
+#pragma mark 关闭mjrefreshing
+- (void)endFreshAndLoadMore{
+    [_shouyeTableview.mj_header endRefreshing];
+    if (self.dataSourceArray.count>=self.maxSize) {
+        [_shouyeTableview.mj_footer endRefreshingWithNoMoreData];
+    }else{
+        [_shouyeTableview.mj_footer endRefreshing];
+    }
+}
 
 #pragma mark 懒加载
 - (UITableView *)shouyeTableview{
@@ -147,23 +272,7 @@ static NSString *const tableviewCellIndentifer=@"Cell";
         [_shouyeTableview registerClass:[QMYBShouYeTableViewCell class] forCellReuseIdentifier:tableviewCellIndentifer];
         [self.view addSubview:_shouyeTableview];
         _shouyeTableview.sd_layout.leftSpaceToView(self.view,0).topSpaceToView(self.view,64).rightSpaceToView(self.view,0).bottomSpaceToView(self.view,0);
-        MJHeader *mjHeader=[MJHeader headerWithRefreshingBlock:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [_shouyeTableview.mj_header endRefreshing];
-                [_shouyeTableview.mj_footer endRefreshing];
-
-            });
-        }];
-        _shouyeTableview.mj_header=mjHeader;
-        
-        MJFooter *mjFooter=[MJFooter footerWithRefreshingBlock:^{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [_shouyeTableview.mj_header endRefreshing];
-                [_shouyeTableview.mj_footer endRefreshing];
-            });
-        }];
-        _shouyeTableview.mj_footer=mjFooter;
-        
+        [self addMJheader];
     }
     return _shouyeTableview;
 }
@@ -171,25 +280,7 @@ static NSString *const tableviewCellIndentifer=@"Cell";
 - (NSMutableArray *)dataSourceArray{
     if (!_dataSourceArray) {
         _dataSourceArray=[NSMutableArray array];
-        for (int i=0; i<10; i++) {
-            QMYBShouYeModel *model=[[QMYBShouYeModel alloc]init];
-            model.imageURL=@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1487569575404&di=2153b9910844f3d3f7b9dae74cd4e3fc&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6c224f4a20a44623c51afdd39a22720e0df3d7ab.jpg";
-            model.titleStr=@"全民医保";
-            model.price=@"热销";
-            model.erweimaStr=@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1487569575404&di=2153b9910844f3d3f7b9dae74cd4e3fc&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6c224f4a20a44623c51afdd39a22720e0df3d7ab.jpg";
-            model.contentStr=@"http://m.qmyb.dajiabao.com/";
-            
-            QMYBShareModel *shareModel=[[QMYBShareModel alloc]init];
-            shareModel.shareTitle=@"测试";
-            shareModel.shareDes=@"分享描述";
-            shareModel.shareImageStr=@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1487569575404&di=2153b9910844f3d3f7b9dae74cd4e3fc&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2F6c224f4a20a44623c51afdd39a22720e0df3d7ab.jpg";
-            shareModel.contentStr=@"http://m.qmyb.dajiabao.com/";
-            
-            model.shareModel=shareModel;
-            
-            [_dataSourceArray addObject:model];
         }
-    }
     return _dataSourceArray;
 }
 
@@ -197,5 +288,16 @@ static NSString *const tableviewCellIndentifer=@"Cell";
     [super didReceiveMemoryWarning];
     
 }
+
+- (UIView *)noDataView{
+    if (!_noDataView) {
+        _noDataView=[self noMessageView:@"暂无相关产品哦"];
+        CGRect oldRect=_noDataView.frame;
+        CGRect newRect=CGRectMake(SCREEN_WIDTH/2.0-oldRect.size.width/2.0, GetHeight(60), oldRect.size.width, oldRect.size.height);
+        _noDataView.frame=newRect;
+    }
+    return _noDataView;
+}
+
 
 @end

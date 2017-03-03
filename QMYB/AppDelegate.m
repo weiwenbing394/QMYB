@@ -10,6 +10,7 @@
 #import "QMYBTabBarController.h"
 #import "NotDismissAlertView.h"
 #import "QMYBLoginViewController.h"
+#import "UserGuideViewController.h"
 
 @interface AppDelegate ()
 
@@ -24,10 +25,18 @@
     self.window=[[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     
     //设置rootVC
-    //QMYBTabBarController *rootVC=[[QMYBTabBarController alloc]init];
-    QMYBLoginViewController *rootVC=[[QMYBLoginViewController alloc]init];
-    self.window.rootViewController=rootVC;
-    
+    if ([UserDefaults boolForKey:@"firstLanch"]==NO) {
+        UserGuideViewController *guide=[[UserGuideViewController alloc]init];
+        self.window.rootViewController=guide;
+    }else{
+        if ([UserDefaults objectForKey:TOKENID]!=nil) {
+            QMYBTabBarController *rootVC=[[QMYBTabBarController alloc]init];
+            self.window.rootViewController=rootVC;
+        }else{
+            QMYBLoginViewController *rootVC=[[QMYBLoginViewController alloc]init];
+            self.window.rootViewController=rootVC;
+        }
+    }
     //键盘
     IQKeyboardManager *manager = [IQKeyboardManager sharedManager];
     manager.shouldResignOnTouchOutside = YES;
@@ -45,7 +54,7 @@
     [self umengTrack];
     
     //检查更新
-    [self update];
+    //[self update];
     
     self.window.backgroundColor=[UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -57,7 +66,7 @@
  */
 - (void)umengShare {
     [[UMSocialManager defaultManager] setUmSocialAppkey:UMENG_APPKEY];
-    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:weChatId appSecret:weChatScreat redirectURL:@"http://www.baidu.com"];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:weChatId appSecret:weChatScreat redirectURL:@"http://www.dajiabao.com"];
     [[UMSocialManager defaultManager] removePlatformProviderWithPlatformTypes:@[@(UMSocialPlatformType_WechatFavorite)]];
 }
 
@@ -92,7 +101,7 @@
     NSString * currentVersion=[[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleShortVersionString"];
     NSString *urlStr=[NSString stringWithFormat:@"%@%@",@"",@"/v1/version"];
     NSDictionary *dic=@{@"id":@"1",@"version":currentVersion};
-    [XWNetworking postWithUrl:urlStr params:dic success:^(id response) {
+    [XWNetworking postJsonWithUrl:urlStr params:dic success:^(id response) {
         NSDictionary *dic =response;
         if ([dic integerForKey:@"code"]==3) {
             NSDictionary *dataDic=[dic dictionaryForKey:@"data"];

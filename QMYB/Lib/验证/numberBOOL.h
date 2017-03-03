@@ -67,4 +67,8 @@
 
 + (BOOL)checkURL : (NSString *) url;
 
+#pragma 正则匹配银行卡号
+
++ (BOOL) checkCardNo:(NSString*) cardNo;
+
 @end

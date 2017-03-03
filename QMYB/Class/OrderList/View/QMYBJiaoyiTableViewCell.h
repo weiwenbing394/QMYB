@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class Jiaoyi;
 
 @interface QMYBJiaoyiTableViewCell : UITableViewCell
 
@@ -19,5 +20,7 @@
 @property (nonatomic,strong)UILabel     *statusLabel;
 
 @property (nonatomic,strong)UILabel     *priceLabel;
+
+@property (nonatomic,strong)Jiaoyi      *model;
 
 @end

@@ -658,6 +658,7 @@ typedef enum {
 {
     [self drawBackground:self.bounds
                inContext:UIGraphicsGetCurrentContext()];
+    
 }
 
 - (void)drawBackground:(CGRect)frame
@@ -703,7 +704,7 @@ typedef enum {
         [arrowPath addLineToPoint: (CGPoint){arrowXM, arrowY0}];
         
         
-        [[UIColor colorWithRed:R0 green:G0 blue:B0 alpha:0.6] set];
+        [[UIColor colorWithRed:R0 green:G0 blue:B0 alpha:1] set];
         
         Y0 += self.kxMenuViewOptions.arrowSize;
         
@@ -720,7 +721,7 @@ typedef enum {
         [arrowPath addLineToPoint: (CGPoint){arrowX0, arrowY0}];
         [arrowPath addLineToPoint: (CGPoint){arrowXM, arrowY1}];
         
-        [[UIColor colorWithRed:R1 green:G1 blue:B1 alpha:0.6] set];
+        [[UIColor colorWithRed:R1 green:G1 blue:B1 alpha:1] set];
         
         Y1 -= self.kxMenuViewOptions.arrowSize;
         
@@ -737,7 +738,7 @@ typedef enum {
         [arrowPath addLineToPoint: (CGPoint){arrowX1, arrowY1}];
         [arrowPath addLineToPoint: (CGPoint){arrowX0, arrowYM}];
         
-        [[UIColor colorWithRed:R0 green:G0 blue:B0 alpha:0.6] set];
+        [[UIColor colorWithRed:R0 green:G0 blue:B0 alpha:1] set];
         
         X0 += self.kxMenuViewOptions.arrowSize;
         
@@ -754,12 +755,14 @@ typedef enum {
         [arrowPath addLineToPoint: (CGPoint){arrowX1, arrowY1}];
         [arrowPath addLineToPoint: (CGPoint){arrowX0, arrowYM}];
         
-        [[UIColor colorWithRed:R1 green:G1 blue:B1 alpha:0.6] set];
+        [[UIColor colorWithRed:R1 green:G1 blue:B1 alpha:1] set];
         
         X1 -= self.kxMenuViewOptions.arrowSize;
     }
     
     [arrowPath fill];
+    
+    
     
     // render body
     
@@ -771,8 +774,8 @@ typedef enum {
     
     const CGFloat locations[] = {0, 1};
     const CGFloat components[] = {
-        R0, G0, B0, 0.6,
-        R1, G1, B1, 0.6,
+        R0, G0, B0, 1,
+        R1, G1, B1, 1,
     };
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();

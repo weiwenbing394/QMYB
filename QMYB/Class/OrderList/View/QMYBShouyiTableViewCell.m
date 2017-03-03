@@ -7,15 +7,17 @@
 //
 
 #import "QMYBShouyiTableViewCell.h"
+#import "Shouyi.h"
 
 @implementation QMYBShouyiTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.selectionStyle=UITableViewCellSelectionStyleNone;
+        
         self.nameLabel=[[UILabel alloc]init];
         self.nameLabel.textColor=color595959;
         self.nameLabel.font=font15;
-        self.nameLabel.text=@"王二小";
         self.nameLabel.textAlignment=NSTextAlignmentCenter;
         [self.contentView addSubview:self.nameLabel];
         [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -27,7 +29,6 @@
         self.zhanghaoLabel=[[UILabel alloc]init];
         self.zhanghaoLabel.textColor=color595959;
         self.zhanghaoLabel.font=font15;
-        self.zhanghaoLabel.text=@"185****8888";
         self.zhanghaoLabel.textAlignment=NSTextAlignmentCenter;
         [self.contentView addSubview:self.zhanghaoLabel];
         [self.zhanghaoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -39,7 +40,6 @@
         self.rishouyiLabel=[[UILabel alloc]init];
         self.rishouyiLabel.textColor=colorf28300;
         self.rishouyiLabel.font=font15;
-        self.rishouyiLabel.text=@"300.00";
         self.rishouyiLabel.textAlignment=NSTextAlignmentCenter;
         [self.contentView addSubview:self.rishouyiLabel];
         [self.rishouyiLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -51,7 +51,6 @@
         self.monthLabel=[[UILabel alloc]init];
         self.monthLabel.textColor=color595959;
         self.monthLabel.font=font15;
-        self.monthLabel.text=@"10000.00元";
         self.monthLabel.textAlignment=NSTextAlignmentCenter;
         [self.contentView addSubview:self.monthLabel];
         [self.monthLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -61,6 +60,13 @@
         }];
     }
     return self;
+}
+
+- (void)setModel:(Shouyi *)model{
+    self.nameLabel.text=model.businessName?model.businessName:@"";
+    self.zhanghaoLabel.text=model.phone?model.phone:@"";
+    self.rishouyiLabel.text=[NSString stringWithFormat:@"%.2f",model.dayCommission];
+    self.monthLabel.text=[NSString stringWithFormat:@"%.2f",model.monthCommission];
 }
 
 - (void)awakeFromNib {

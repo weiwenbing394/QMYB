@@ -11,8 +11,23 @@
 #import "QMYBTuijianZhuceViewController.h"
 #import "QMYBDianyuanListViewController.h"
 #import "QMYBZhanghujiluController.h"
+#import "QMYBTixianViewController.h"
+#import "QMYBAnquanViewController.h"
+#import "User.h"
+#import "QMYBBankRegisteViewController.h"
 
-@interface QMYBMeViewController ()
+@interface QMYBMeViewController (){
+    UIScrollView *myScroolerView;
+    UILabel *bianhao;
+    UILabel *tixianjiane;
+    UILabel *ketixianjiane;
+    UILabel *jinrishouyie;
+    UIView *contentView;
+    UIView *guanli;
+    UIView *tuijian;
+    UIView *set;
+    UIView *todayview;
+}
 
 @end
 
@@ -22,29 +37,115 @@
     [super viewDidLoad];
     self.bgView.hidden=YES;
     [self initUI];
+    [myScroolerView.mj_header beginRefreshing];
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self setNeedsStatusBarAppearanceUpdate];
+    
+    User  *user=[NSKeyedUnarchiver unarchiveObjectWithData:[UserDefaults objectForKey:USER]];
+    //推广费
+    NSString *tixianNumber=[NSString stringWithFormat:@"%.2f元",user.accountAmt];
+    NSMutableAttributedString *att=[[NSMutableAttributedString alloc]initWithString:tixianNumber];
+    [att addAttribute:NSFontAttributeName value:font25 range:NSMakeRange(0, tixianNumber.length)];
+    [att addAttribute:NSFontAttributeName value:font13 range:NSMakeRange(tixianNumber.length-1, 1)];
+    [tixianjiane setAttributedText:att];
+    
+    //可提现金额
+    NSString *ketixianStr=[NSString stringWithFormat:@"可提现金额为%.2f元",user.withdrawAmt];
+    ketixianjiane.text=ketixianStr;
+}
+
+#pragma mark 保存更新用户数据
+- (void)saveData:(id)response{
+    NSLog(@"%@==",response);
+    if (response) {
+        NSInteger statusCode=[response integerForKey:@"code"];
+        if (statusCode==0) {
+            NSString *errorMsg=[response stringForKey:@"msg"];
+            [MBProgressHUD showError:errorMsg];
+        }else{
+            NSString *tokenID=response[@"tokenId"]!=[NSNull null]?response[@"tokenId"]:@"";
+            NSInteger userId=[response[@"data"] integerForKey:@"userId"];
+            User *user=[User mj_objectWithKeyValues:response[@"data"]];
+            NSData *userData=[NSKeyedArchiver archivedDataWithRootObject:user];
+            [UserDefaults setObject:tokenID forKey:TOKENID ];
+            [UserDefaults setInteger:userId forKey:USERID];
+            [UserDefaults setObject:userData forKey:USER];
+            [UserDefaults synchronize];
+            
+            //推广费
+            NSString *tixianNumber=[NSString stringWithFormat:@"%.2f元",user.accountAmt];
+            NSMutableAttributedString *att=[[NSMutableAttributedString alloc]initWithString:tixianNumber];
+            [att addAttribute:NSFontAttributeName value:font25 range:NSMakeRange(0, tixianNumber.length)];
+            [att addAttribute:NSFontAttributeName value:font13 range:NSMakeRange(tixianNumber.length-1, 1)];
+            [tixianjiane setAttributedText:att];
+            
+            //可提现金额
+            NSString *ketixianStr=[NSString stringWithFormat:@"可提现金额为%.2f元",user.withdrawAmt];
+            ketixianjiane.text=ketixianStr;
+            
+            //今日收益
+            NSString *todayshouyi=[NSString stringWithFormat:@"%.2f元",user.dayCommission];
+            NSMutableAttributedString *attr=[[NSMutableAttributedString alloc]initWithString:todayshouyi];
+            [attr addAttribute:NSFontAttributeName value:font25 range:NSMakeRange(0, todayshouyi.length)];
+            [attr addAttribute:NSFontAttributeName value:font13 range:NSMakeRange(todayshouyi.length-1, 1)];
+            [jinrishouyie setAttributedText:attr];
+            
+            //更新视图
+            if (user.level==5) {
+                [guanli removeFromSuperview];
+                guanli=nil;
+                
+                [tuijian removeFromSuperview];
+                tuijian=nil;
+                
+                [set mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.top.mas_equalTo(todayview.mas_bottom).offset(GetHeight(10));
+                }];
+                
+                [contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.bottom.mas_equalTo(set.mas_bottom).offset(GetHeight(15)+2*GetHeight(50));
+                }];
+            }else{
+                [contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.bottom.mas_equalTo(set.mas_bottom).offset(GetHeight(15));
+                }];
+            }
+        }
+    }
+}
+
+
 - (void)initUI{
-    UIScrollView *myScroolerView=[[UIScrollView alloc]init];
+    
+    myScroolerView=[[UIScrollView alloc]init];
     myScroolerView.showsVerticalScrollIndicator=NO;
     myScroolerView.showsHorizontalScrollIndicator=NO;
     myScroolerView.backgroundColor=[UIColor clearColor];
     [self.view addSubview:myScroolerView];
+    
     [myScroolerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.top.mas_equalTo(self.view);
         make.width.mas_equalTo(SCREEN_WIDTH);
     }];
     
     MJHeader *mjHeader=[MJHeader headerWithRefreshingBlock:^{
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSString *url=[NSString stringWithFormat:@"%@%@",APPHOSTURL,updateUserInfo];
+        User  *user=[NSKeyedUnarchiver unarchiveObjectWithData:[UserDefaults objectForKey:USER] ];
+        NSDictionary *dic=@{@"phone":user.phone};
+        [XWNetworking postJsonWithUrl:url params:dic success:^(id response) {
             [myScroolerView.mj_header endRefreshing];
-            [myScroolerView.mj_footer endRefreshing];
-            
-        });
+            [self saveData:response];
+        } fail:^(NSError *error) {
+            [MBProgressHUD showError:@"获取个人信息失败"];
+            [myScroolerView.mj_header endRefreshing];
+        } showHud:NO];
     }];
     myScroolerView.mj_header=mjHeader;
     
-    UIView *contentView=[[UIView alloc]init];
+    contentView=[[UIView alloc]init];
     contentView.backgroundColor=[UIColor clearColor];
     [myScroolerView addSubview:contentView];
     [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -67,7 +168,7 @@
         make.top.mas_equalTo(topBG).offset(33);
     }];
     
-    UIImageView *touxiang=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"形状-20"]];
+    UIImageView *touxiang=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"login-logo"]];
     [topBG addSubview:touxiang];
     [touxiang mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(topBG.mas_centerX);
@@ -82,7 +183,10 @@
         make.top.mas_equalTo(topBG).offset(GetHeight(174));
     }];
     
-    UILabel *bianhao=[UILabel labelWithTitle:@"ID:15424354323" color:[UIColor whiteColor] font:font13];
+    User  *user=[NSKeyedUnarchiver unarchiveObjectWithData:[UserDefaults objectForKey:USER] ];
+    
+    NSString *bianhaoStr=[NSString stringWithFormat:@"ID:%@",user.accountCode];
+    bianhao=[UILabel labelWithTitle:bianhaoStr color:[UIColor whiteColor] font:font13];
     [topBG addSubview:bianhao];
     [bianhao mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(topBG);
@@ -105,14 +209,20 @@
         make.top.mas_equalTo(middleview).offset(GetHeight(13));
     }];
     
-    UILabel *tixianjiane=[UILabel labelWithTitle:@"100000.00元" color:colorf28300 font:font25];
+    NSString *tixianNumber=[NSString stringWithFormat:@"%.2f元",user.accountAmt];
+    tixianjiane=[UILabel labelWithTitle:tixianNumber color:colorf28300 font:font25];
+    NSMutableAttributedString *att=[[NSMutableAttributedString alloc]initWithString:tixianNumber];
+    [att addAttribute:NSFontAttributeName value:font25 range:NSMakeRange(0, tixianNumber.length)];
+    [att addAttribute:NSFontAttributeName value:font13 range:NSMakeRange(tixianNumber.length-1, 1)];
+    [tixianjiane setAttributedText:att];
     [middleview addSubview:tixianjiane];
     [tixianjiane mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(GetWidth(15));
         make.top.mas_equalTo(tuiguanfei.mas_bottom).offset(GetHeight(13));
     }];
     
-    UILabel *ketixianjiane=[UILabel labelWithTitle:@"可提现金额为5000.00元" color:color787878 font:font14];
+    NSString *ketixianStr=[NSString stringWithFormat:@"可提现金额为%.2f元",user.withdrawAmt];
+    ketixianjiane=[UILabel labelWithTitle:ketixianStr color:color787878 font:font14];
     [middleview addSubview:ketixianjiane];
     [ketixianjiane mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(GetWidth(15));
@@ -154,7 +264,7 @@
     }];
     
     
-    UIView *todayview=[[UIView alloc]init];
+    todayview=[[UIView alloc]init];
     todayview.backgroundColor=[UIColor whiteColor];
     [contentView addSubview:todayview];
     [todayview mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -178,7 +288,12 @@
         make.top.mas_equalTo(todayLineup).offset(GetHeight(13));
     }];
     
-    UILabel *jinrishouyie=[UILabel labelWithTitle:@"100000.00元" color:colorf28300 font:font25];
+    NSString *todayshouyi=[NSString stringWithFormat:@"%.2f元",user.dayCommission];
+    jinrishouyie=[UILabel labelWithTitle:todayshouyi color:colorf28300 font:font25];
+    NSMutableAttributedString *attr=[[NSMutableAttributedString alloc]initWithString:todayshouyi];
+    [attr addAttribute:NSFontAttributeName value:font25 range:NSMakeRange(0, todayshouyi.length)];
+    [attr addAttribute:NSFontAttributeName value:font13 range:NSMakeRange(todayshouyi.length-1, 1)];
+    [jinrishouyie setAttributedText:attr];
     [todayview addSubview:jinrishouyie];
     [jinrishouyie mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(GetWidth(15));
@@ -200,7 +315,7 @@
     
     
     
-    UIView *guanli=[self getButtonView:@"电源管理" titleStr:@"店员管理" buttonTage:100];
+    guanli=[self getButtonView:@"电源管理" titleStr:@"店员管理" buttonTage:100];
     [contentView addSubview:guanli];
     [guanli mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(todayview.mas_bottom).offset(GetHeight(10));
@@ -208,7 +323,7 @@
         make.height.mas_equalTo(GetHeight(50));
     }];
     
-    UIView *tuijian=[self getButtonView:@"推荐注册" titleStr:@"推荐注册" buttonTage:101];
+    tuijian=[self getButtonView:@"推荐注册" titleStr:@"推荐注册" buttonTage:101];
     [contentView addSubview:tuijian];
     [tuijian mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(guanli.mas_bottom).offset(-0.5);
@@ -216,7 +331,7 @@
         make.height.mas_equalTo(GetHeight(50));
     }];
     
-    UIView *set=[self getButtonView:@"安全设置" titleStr:@"安全设置" buttonTage:102];
+    set=[self getButtonView:@"安全设置" titleStr:@"安全设置" buttonTage:102];
     [contentView addSubview:set];
     [set mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(tuijian.mas_bottom).offset(-0.5);
@@ -224,10 +339,7 @@
         make.height.mas_equalTo(GetHeight(50));
     }];
     
-    
-    
-    NSString *str =@"店员";
-    if (![str isEqualToString:@"店员"]) {
+    if (user.level==5) {
         [guanli removeFromSuperview];
         guanli=nil;
         
@@ -317,25 +429,39 @@
 
 //提现
 - (void)tixian:(UIButton *)sender{
+    User  *user=[NSKeyedUnarchiver unarchiveObjectWithData:[UserDefaults objectForKey:USER]];
+    if (0<[self clearSpace:user.bankId].length) {
+        QMYBTixianViewController *tixian=[[QMYBTixianViewController alloc]init];
+        tixian.hidesBottomBarWhenPushed=YES;
+        [self.navigationController pushViewController:tixian animated:YES];
+    }else{
+        QMYBBankRegisteViewController *Bankregister=[[QMYBBankRegisteViewController alloc] init];
+        Bankregister.hidesBottomBarWhenPushed=YES;
+        [self.navigationController pushViewController:Bankregister animated:YES];
+        [MBProgressHUD ToastInformation:@"请先绑定提现银行卡"];
+    }
 }
 
 - (void)buttonClick:(UIButton *)sender{
     if (sender.tag==100) {
-        QMYBDianyuanListViewController *list=[[QMYBDianyuanListViewController alloc]init];
-        list.hidesBottomBarWhenPushed=YES;
-        [self.navigationController pushViewController:list animated:YES];
+        QMYBDianyuanListViewController *listController=[[QMYBDianyuanListViewController alloc]init];
+        listController.hidesBottomBarWhenPushed=YES;
+        [self.navigationController pushViewController:listController animated:YES];
     }else if (sender.tag==101) {
-        QMYBTuijianZhuceViewController *tuijian=[[QMYBTuijianZhuceViewController alloc]init];
-        tuijian.hidesBottomBarWhenPushed=YES;
-        [self.navigationController pushViewController:tuijian animated:YES];
+        QMYBTuijianZhuceViewController *tuijianController=[[QMYBTuijianZhuceViewController alloc]init];
+        tuijianController.hidesBottomBarWhenPushed=YES;
+        [self.navigationController pushViewController:tuijianController animated:YES];
     }else if (sender.tag==102) {
-        NSLog(@"安全设置");
+        QMYBAnquanViewController *anquanController=[[QMYBAnquanViewController alloc]init];
+        anquanController.hidesBottomBarWhenPushed=YES;
+        [self.navigationController pushViewController:anquanController animated:YES];
     }
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
 };
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

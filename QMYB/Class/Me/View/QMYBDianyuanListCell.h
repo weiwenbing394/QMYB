@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class Dianyuan;
 
 @interface QMYBDianyuanListCell : UITableViewCell
 
@@ -15,5 +16,7 @@
 @property (nonatomic,strong)UILabel *zhanghaoLabel;
 
 @property (nonatomic,strong)UILabel *dataLabel;
+
+@property (nonatomic,strong)Dianyuan *model;
 
 @end

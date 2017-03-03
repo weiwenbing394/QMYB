@@ -18,7 +18,7 @@
  */
 + (MBProgressHUD *)ToastInformation:(NSString *)information{
     
-    return [self showInformation:information toView:nil andAfterDelay:1];
+    return [self showInformation:information toView:nil andAfterDelay:2];
 };
 
 /**
@@ -26,7 +26,7 @@
  *  @param information 提示文字
  */
 + (MBProgressHUD *)ToastInformation:(NSString *)information toView:(UIView *)view{
-    return [self showInformation:information toView:view andAfterDelay:1];
+    return [self showInformation:information toView:view andAfterDelay:2];
 };
 
 
@@ -171,7 +171,7 @@
  *  成功图标弹出
  */
 + (void)showSuccess:(NSString *)success toView:(UIView *)view{
-    [self showCustomView:@"绑定成功" andTextString:success toView:view andAfterDelay:1];
+    [self showCustomView:@"绑定成功" andTextString:success toView:view andAfterDelay:2];
 };
 /**
  *  失败图标弹出
@@ -183,7 +183,7 @@
  *  失败图标弹出
  */
 + (void)showError:(NSString *)error toView:(UIView *)view{
-    [self showCustomView:@"close" andTextString:error toView:view andAfterDelay:1];
+    [self showCustomView:@"绑定失败" andTextString:error toView:view andAfterDelay:2];
 };
 
 
@@ -217,7 +217,7 @@
     
     hud.contentColor=[UIColor whiteColor];
     
-    hud.margin=GetWidth(14);
+    hud.margin=GetWidth(25);
     
     hud.square=NO;
     

@@ -104,7 +104,7 @@ NSString *const JCAlertViewWillShowNotification = @"JCAlertViewWillShowNotificat
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    [self addScreenShot];
+    //[self addScreenShot];
     [self addCoverView];
     [self addAlertView];
 }
@@ -229,7 +229,7 @@ NSString *const JCAlertViewWillShowNotification = @"JCAlertViewWillShowNotificat
 
 - (void)addCoverView{
     self.coverView = [[UIButton alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.coverView.backgroundColor = JCColor(5, 0, 10);
+    self.coverView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
     [self.coverView addTarget:self action:@selector(coverViewClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.coverView];
 }

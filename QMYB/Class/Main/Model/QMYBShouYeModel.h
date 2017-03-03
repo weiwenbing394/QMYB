@@ -7,22 +7,26 @@
 //
 
 #import <Foundation/Foundation.h>
-@class QMYBShareModel;
+
 
 @interface QMYBShouYeModel : NSObject
+//图片
+@property (nonatomic,copy)NSString *productImage;
+//产品名称
+@property (nonatomic,copy)NSString *productName;
+//内容url
+@property (nonatomic,copy)NSString *saleUrl;
+//二维码
+@property (nonatomic,copy)NSString *qrUrl;
+//分享的标题
+@property (nonatomic,copy)NSString *title;
+//分享的副标题
+@property (nonatomic,copy)NSString *subhead;
+//分享的图片地址
+@property (nonatomic,copy)NSString *shareImagePath;
+//分享的内容点击地址
+@property (nonatomic,copy)NSString *shareUrl;
 
-@property (nonatomic,copy)NSString *imageURL;
 
-@property (nonatomic,copy)NSString *titleStr;
-
-@property (nonatomic,copy)NSString *price;
-
-@property (nonatomic,copy)NSString *oldPrice;
-
-@property (nonatomic,copy)NSString *erweimaStr;
-
-@property (nonatomic,copy)NSString *contentStr;
-
-@property (nonatomic,strong)QMYBShareModel *shareModel;
 
 @end

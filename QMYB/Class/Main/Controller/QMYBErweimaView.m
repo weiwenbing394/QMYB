@@ -23,17 +23,32 @@
     if (self=[super initWithFrame:frame]) {
         self.backgroundColor=[UIColor clearColor];
         
+        UIView *whiteView=[[UIView alloc]init];
+        whiteView.layer.cornerRadius=GetWidth(10);
+        whiteView.clipsToBounds=YES;
+        whiteView.backgroundColor=[UIColor colorWithHexString:@"#cfebff"];
+        [self addSubview:whiteView];
+        whiteView.sd_layout.topSpaceToView(self,0).leftSpaceToView(self,0).rightSpaceToView(self,0).bottomSpaceToView(self,65);
+        
+        UIView *whiteView2=[[UIView alloc]init];
+        whiteView2.backgroundColor=[UIColor whiteColor];
+        whiteView2.borderWidth=0.5;
+        whiteView2.borderColor=[UIColor colorWithHexString:@"#cfebff"];
+        [whiteView addSubview:whiteView2];
+        whiteView2.sd_layout.topSpaceToView(whiteView,GetWidth(12)).leftSpaceToView(whiteView,GetWidth(12)).rightSpaceToView(whiteView,GetWidth(12)).bottomSpaceToView(whiteView,GetWidth(12));
+        
         UIImageView *imageView=[[UIImageView alloc]init];
-        [imageView sd_setImageWithURL:[NSURL URLWithString:imageStr]];
-        imageView.backgroundColor=[UIColor lightGrayColor];
-        imageView.layer.cornerRadius=3;
+        [imageView sd_setImageWithURL:[NSURL URLWithString:imageStr] placeholderImage:[UIImage imageNamed:@"空白图"]];
+        imageView.backgroundColor=[UIColor whiteColor];
+        imageView.layer.cornerRadius=0;
         imageView.clipsToBounds=YES;
-        [self addSubview:imageView];
-        imageView.sd_layout.topSpaceToView(self,0).leftSpaceToView(self,0).rightSpaceToView(self,0).bottomSpaceToView(self,65);
+        [whiteView addSubview:imageView];
+        imageView.sd_layout.topSpaceToView(whiteView,GetWidth(20)).leftSpaceToView(whiteView,GetWidth(20)).rightSpaceToView(whiteView,GetWidth(20)).bottomSpaceToView(whiteView,GetWidth(20));
         self.erweimaImageView=imageView;
         
         UIButton *cancelButton=[[UIButton alloc]init];
-        cancelButton.backgroundColor=[UIColor redColor];
+        cancelButton.backgroundColor=[UIColor clearColor];
+        [cancelButton setImage:[UIImage imageNamed:@"gb"] forState:0];
         [cancelButton addTarget:self action:@selector(cancelClick:) forControlEvents:UIControlEventTouchUpInside];
         cancelButton.layer.cornerRadius=25;
         cancelButton.clipsToBounds=YES;

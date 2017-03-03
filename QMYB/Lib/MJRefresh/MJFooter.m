@@ -94,7 +94,7 @@
             [self.myIndicate startAnimating];
             break;
         case MJRefreshStateNoMoreData:
-            self.footerLabel.text=@"数据加载完毕";
+            self.footerLabel.text=@"--  我是有底线的  --";
             self.footerLabel.hidden=NO;
             self.detailLabel.hidden=YES;
             [self.myIndicate stopAnimating];
